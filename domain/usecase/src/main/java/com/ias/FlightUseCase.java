@@ -32,7 +32,7 @@ public class FlightUseCase {
     }
 
     private void isValid(FlightDomain flightDomain){
-        if(flightDomain.getName().matches("^[A-Za-z]+$")){
+        if(!flightDomain.getName().matches("^[A-Za-z]+$")){
             throw new UserIllegalArgumentException("Flight name must be only text.");
         }
 

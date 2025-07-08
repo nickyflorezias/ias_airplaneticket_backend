@@ -18,15 +18,27 @@ public class TicketUseCase {
         return ticketRepositoryGateway.findAllTicketsByReservationId(reservationId);
     }
 
+    public List<TicketDomain> getAllTicketsByFlightId(Long flightId){
+        FlightDomain flightDomain = flightRepositoryGateway.findById(flightId);
+
+        return ticketRepositoryGateway.findAllTicketsByFlightId(flightDomain.getId());
+    }
+
     public TicketDomain getById(Long ticketId){
         return ticketRepositoryGateway.findById(ticketId);
     }
 
-    public TicketDomain createTicket(TicketDomain ticketDomain){
-        FlightDomain flightDomain = flightRepositoryGateway.findById(ticketDomain.getFlight().getId());
+    public TicketDomain createTicket(Long flightId, TicketDomain ticketDomain){
+        FlightDomain flightDomain = flightRepositoryGateway.findById(flightId);
         if(flightDomain.isFull()){
             throw new FlightFullException("The flight is full.");
         }
-        return ticketRepositoryGateway.save(ticketDomain);
+        TicketDomain ticket = new TicketDomain(
+                ticketDomain.getId(),
+                ticketDomain.getDate() != null ? ticketDomain.getDate() : null,
+                flightDomain,
+                ticketDomain.getReservation() != null ? ticketDomain.getReservation() : null
+        );
+        return ticketRepositoryGateway.save(flightId, ticket);
     }
 }
