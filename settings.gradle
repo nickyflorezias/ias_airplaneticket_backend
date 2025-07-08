@@ -6,6 +6,7 @@ include ':app-service'
 include ':entry-points'
 include ':driven-adapters'
 include ':helpers'
+include ':exception'
 
 project(':model').projectDir = file('./domain/model')
 project(':usecase').projectDir = file('./domain/usecase')
@@ -13,3 +14,4 @@ project(':app-service').projectDir = file('./application/app-service')
 project(':entry-points').projectDir = file('./infrastructure/entry-points')
 project(':driven-adapters').projectDir = file('./infrastructure/driven-adapters')
 project(':helpers').projectDir = file('./infrastructure/helpers')
+project(':exception').projectDir = file('./domain/exception')
