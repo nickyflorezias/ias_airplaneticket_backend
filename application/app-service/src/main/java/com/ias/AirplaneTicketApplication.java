@@ -1,4 +1,4 @@
-package com.ias.AirplaneTicket;
+package com.ias;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class AirplaneTicketApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AirplaneTicketApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(AirplaneTicketApplication.class, args);
+    }
 
 }
