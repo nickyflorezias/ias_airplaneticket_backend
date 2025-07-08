@@ -20,7 +20,12 @@ public class UserUseCase {
     }
 
     public String loginUser(UserDomain userDomain){
-        return "";
+        UserDomain userFounded = userRepositoryGateway.findByEmail(userDomain.getEmail());
+
+        if(!userDomain.getPassword().equals(userFounded.getPassword())){
+            throw new IllegalArgumentException("Password doesn't match.");
+        }
+        return "Logged jwt";
     }
 
     public UserDomain getUserById(Long userId){
@@ -45,11 +50,11 @@ public class UserUseCase {
             throw new UserIllegalArgumentException("Username must be only text.");
         }
 
-        if(!userDomain.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,}$")){
+        if(!userDomain.getEmail().matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")){
             throw new UserIllegalArgumentException("Email is not valid.");
         }
 
-        if(!userDomain.getPassword().matches("^(?=.*[!@#$%^&*(),.?\":{}|<>])[a-zA-Z0-9]{6,}$")){
+        if(!userDomain.getPassword().matches("^(?=.{8,20}$)(?=.*[A-Za-z])(?=.*(?=.*[0-9]))(?=.*?[#?!@$%^&*-])(?!.*(.)\\1).+$")){
             throw new UserIllegalArgumentException("Password is not valid.");
         }
     }

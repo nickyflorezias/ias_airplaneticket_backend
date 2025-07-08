@@ -40,4 +40,15 @@ public class UserDomain {
     public List<ReservationDomain> getReservations() {
         return reservationDomains;
     }
+
+    @Override
+    public String toString() {
+        return "UserDomain{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", reservationDomains=" + reservationDomains +
+                '}';
+    }
 }
