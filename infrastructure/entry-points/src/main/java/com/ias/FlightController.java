@@ -1,5 +1,7 @@
 package com.ias;
 
+import com.ias.dto.ResponseDTO;
+import com.ias.dto.request.FlightDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +19,45 @@ public class FlightController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FlightDomain>> getAllFlights(){
-        return ResponseEntity.status(HttpStatus.OK).body(flightUseCase.getAllFlights());
+    public ResponseEntity<ResponseDTO> getAllFlights(){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDTO(
+                        flightUseCase.getAllFlights(),
+                        HttpStatus.OK,
+                        "All Flights."
+                ));
     }
 
     @GetMapping("/{flightId}")
-    public ResponseEntity<FlightDomain> getFlightById(@PathVariable Long flightId){
-        return ResponseEntity.status(HttpStatus.OK).body(flightUseCase.getFlightById(flightId));
+    public ResponseEntity<ResponseDTO> getFlightById(@PathVariable Long flightId){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDTO(
+                        flightUseCase.getFlightById(flightId),
+                        HttpStatus.OK,
+                        "Get Flight by id."
+                ));
     }
     @PostMapping
-    public ResponseEntity<FlightDomain> createFlight(@RequestBody FlightDomain flightDomain){
-        return ResponseEntity.status(HttpStatus.OK).body(flightUseCase.createFlight(flightDomain));
+    public ResponseEntity<ResponseDTO> createFlight(@RequestBody FlightDTO flightDomain){
+        FlightDomain flight = new FlightDomain(
+                null,
+                flightDomain.getName(),
+                flightDomain.getOriginCity(),
+                flightDomain.getDestinyCity(),
+                flightDomain.getDate(),
+                flightDomain.getPlaneName(),
+                flightDomain.getCantSeats(),
+                false,
+                null
+        );
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDTO(
+                        flightUseCase.createFlight(flight),
+                        HttpStatus.CREATED,
+                        "Flight created successfully."
+                ));
     }
 }

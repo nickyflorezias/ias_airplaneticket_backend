@@ -5,6 +5,7 @@ import com.ias.dbo.FlightDBO;
 import com.ias.dbo.TicketDBO;
 import com.ias.gateway.FlightRepositoryGateway;
 import com.ias.gateway.TicketRepositoryGateway;
+import com.ias.gateway.UserRepositoryGateway;
 import com.ias.repositories.FlightRepository;
 import com.ias.repositories.TicketRepository;
 import jakarta.transaction.Transactional;
@@ -17,19 +18,19 @@ public class TicketRepositoryAdapter implements TicketRepositoryGateway {
 
     private final TicketRepository ticketRepository;
     private final FlightRepositoryGateway flightRepository;
+    private final UserRepositoryGateway userRepository;
 
-    public TicketRepositoryAdapter(TicketRepository ticketRepository, FlightRepositoryGateway flightRepository) {
+    public TicketRepositoryAdapter(TicketRepository ticketRepository, FlightRepositoryGateway flightRepository, UserRepositoryGateway userRepository) {
         this.ticketRepository = ticketRepository;
         this.flightRepository = flightRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     @Transactional
     public List<TicketDomain> findAllTicketsByReservationId(Long reservationId) {
         return ticketRepository.findAll()
-                .stream()
-                .filter(ticketDBO -> ticketDBO.getReservation().getId().equals(reservationId))
-                .map(TicketDBO::toDomain)
+                .stream().map(TicketDBO::toDomain)
                 .toList();
     }
 
@@ -56,5 +57,14 @@ public class TicketRepositoryAdapter implements TicketRepositoryGateway {
     public TicketDomain save(Long flightId, TicketDomain ticketDomain) {
         flightRepository.findById(flightId);
         return ticketRepository.save(TicketDBO.fromDomain(ticketDomain)).toDomain();
+    }
+
+    @Override
+    @Transactional
+    public List<TicketDomain> findAllById(List<Long> ids) {
+        return ticketRepository.findAllById(ids)
+                .stream()
+                .map(TicketDBO::toDomain)
+                .toList();
     }
 }

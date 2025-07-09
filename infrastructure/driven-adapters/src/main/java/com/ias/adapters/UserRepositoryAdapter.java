@@ -25,7 +25,9 @@ public class UserRepositoryAdapter implements UserRepositoryGateway {
     @Override
     @Transactional
     public UserDomain findById(Long userId) {
-        return null;
+        return userRepository.findById(userId)
+                .map(UserDBO::toDomain)
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
     }
 
     @Override

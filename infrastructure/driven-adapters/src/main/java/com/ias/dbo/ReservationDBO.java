@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,87 +30,107 @@ public class ReservationDBO {
     private LocalDateTime date;
     private boolean isEnabled;
 
+    private String description;
+
     @ManyToOne
     @JoinColumn(name = "userId")
     private UserDBO user;
 
-    @OneToMany(mappedBy = "reservation")
-    private List<TicketDBO> tickets;
+    @ManyToOne
+    @JoinColumn(name = "ticketId")
+    private TicketDBO ticket;
 
-    public static ReservationDBO fromDomain(ReservationDomain domain){
-        return new ReservationDBO(
-                domain.getId(),
-                domain.getDate(),
-                domain.isEnabled(),
-                domain.getUserDomain() != null ? new UserDBO(
-                        domain.getUserDomain().getId(),
-                        domain.getUserDomain().getUsername(),
-                        domain.getUserDomain().getEmail(),
-                        domain.getUserDomain().getPassword(),
-                        null
-                ) : null,
-                domain.getTickets() != null ? domain.getTickets().stream()
-                        .map(ticketDomain -> new TicketDBO(
-                                ticketDomain.getId(),
-                                ticketDomain.getDate(),
-                                ticketDomain.getFlight() != null ? new FlightDBO(
-                                        ticketDomain.getFlight().getId(),
-                                        ticketDomain.getFlight().getName(),
-                                        ticketDomain.getFlight().getOriginCity(),
-                                        ticketDomain.getFlight().getDestinyCity(),
-                                        ticketDomain.getFlight().getDate(),
-                                        ticketDomain.getFlight().getPlaneName(),
-                                        ticketDomain.getFlight().getCantSeats(),
-                                        ticketDomain.getFlight().isFull(),
-                                        null
-                                ) : null,
-                                ticketDomain.getReservation() != null ? new ReservationDBO(
-                                        ticketDomain.getReservation().getId(),
-                                        ticketDomain.getReservation().getDate(),
-                                        ticketDomain.getReservation().isEnabled(),
-                                        null,
-                                        null
-                                ) : null
-                        )).toList() : new ArrayList<>()
-        );
+    public static ReservationDBO fromDomain(ReservationDomain domain) {
+        if (domain == null) return null;
+
+        ReservationDBO reservationDBO = new ReservationDBO();
+        reservationDBO.setId(domain.getId());
+        reservationDBO.setDate(domain.getDate());
+        reservationDBO.setEnabled(domain.isEnabled());
+        reservationDBO.setDescription(domain.getDescription());
+
+        if (domain.getUserDomain() != null) {
+            reservationDBO.setUser(new UserDBO(
+                    domain.getUserDomain().getId(),
+                    domain.getUserDomain().getUsername(),
+                    domain.getUserDomain().getEmail(),
+                    domain.getUserDomain().getPassword(),
+                    domain.getUserDomain().getTickets() != null ? domain.getUserDomain().getTickets().stream()
+                            .map(ticketDomain -> new TicketDBO(
+                                    ticketDomain.getId(),
+                                    ticketDomain.getSeat(),
+                                    null,
+                                    null,
+                                    null
+                            )).toList() : null,
+                    null
+            ));
+        }
+
+        if(domain.getTicket() != null){
+            reservationDBO.setTicket(
+                    new TicketDBO(
+                            domain.getTicket().getId(),
+                            domain.getTicket().getSeat(),
+                            domain.getTicket().getFlight() != null ? new FlightDBO(
+                                    domain.getTicket().getFlight().getId(),
+                                    domain.getTicket().getFlight().getName(),
+                                    domain.getTicket().getFlight().getOriginCity(),
+                                    domain.getTicket().getFlight().getDestinyCity(),
+                                    domain.getTicket().getFlight().getDate(),
+                                    domain.getTicket().getFlight().getPlaneName(),
+                                    domain.getTicket().getFlight().getCantSeats(),
+                                    domain.getTicket().getFlight().isFull(),
+                                    null
+                            ) : null,
+                            null,
+                            null
+                    ));
+        }else{
+            reservationDBO.setTicket(null);
+        }
+
+        return reservationDBO;
     }
 
-    public ReservationDomain toDomain(){
+    public ReservationDomain toDomain() {
         return new ReservationDomain(
-                getId(),
-                getDate(),
-                isEnabled,
-                getUser() != null ? new UserDomain(
-                        getUser().getId(),
-                        getUser().getUsername(),
-                        getUser().getEmail(),
-                        getUser().getPassword(),
-                        getUser().getReservation() != null ? getUser().getReservation().stream()
-                                .map(reservationDBO -> new ReservationDomain(
-                                        reservationDBO.getId(),
-                                        reservationDBO.getDate(),
-                                        reservationDBO.isEnabled,
+                this.id,
+                this.date,
+                this.isEnabled,
+                this.description,
+                this.user != null ? new UserDomain(
+                        this.user.getId(),
+                        this.user.getUsername(),
+                        this.user.getEmail(),
+                        this.user.getPassword(),
+                        this.user.getTickets() != null ? this.user.getTickets().stream()
+                                .map(ticketDBO -> new TicketDomain(
+                                        ticketDBO.getId(),
+                                        ticketDBO.getSeat(),
+                                        ticketDBO.getFlight() != null ? new FlightDomain(
+                                                ticketDBO.getFlight().getId(),
+                                                ticketDBO.getFlight().getName(),
+                                                ticketDBO.getFlight().getOriginCity(),
+                                                ticketDBO.getFlight().getDestinyCity(),
+                                                ticketDBO.getFlight().getDate(),
+                                                ticketDBO.getFlight().getPlaneName(),
+                                                ticketDBO.getFlight().getCantSeats(),
+                                                ticketDBO.getFlight().isFull(),
+                                                null
+                                        ) : null,
                                         null,
-                                        reservationDBO.toDomain().getTickets()
-                                )).toList() : new ArrayList<>()
-                ) : null,
-                getTickets() != null ? getTickets().stream()
-                        .map(ticketDBO -> new TicketDomain(
-                                ticketDBO.getId(),
-                                ticketDBO.getDate(),
-                                ticketDBO.getFlight() != null ? new FlightDomain(
-                                        ticketDBO.getFlight().getId(),
-                                        ticketDBO.getFlight().getName(),
-                                        ticketDBO.getFlight().getOriginCity(),
-                                        ticketDBO.getFlight().getDestinyCity(),
-                                        ticketDBO.getFlight().getDate(),
-                                        ticketDBO.getFlight().getPlaneName(),
-                                        ticketDBO.getFlight().getCantSeats(),
-                                        ticketDBO.getFlight().isFull(),
                                         null
-                                ) : null,
-                                null
-                        )).toList() : new ArrayList<>()
+                                )).toList() : null,
+                        null
+                ) : null,
+                this.ticket != null ? new TicketDomain(
+                        this.ticket.getId(),
+                        this.ticket.getSeat(),
+                        this.ticket.toDomain().getFlight(),
+                        null,
+                        null
+                ) : null
         );
     }
 }

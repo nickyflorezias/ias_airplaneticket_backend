@@ -65,4 +65,54 @@ public class FlightDomain {
     public List<TicketDomain> getTickets() {
         return ticketDomains;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setOriginCity(String originCity) {
+        this.originCity = originCity;
+    }
+
+    public void setDestinyCity(String destinyCity) {
+        this.destinyCity = destinyCity;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void setPlaneName(String planeName) {
+        this.planeName = planeName;
+    }
+
+    public void setCantSeats(int cantSeats) {
+        this.cantSeats = cantSeats;
+    }
+
+    public void setFull(boolean full) {
+        isFull = full;
+    }
+
+    public void setTicketDomains(List<TicketDomain> ticketDomains) {
+        this.ticketDomains = ticketDomains;
+    }
+
+    @Override
+    public String toString() {
+        return "FlightDomain{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", originCity='" + originCity + '\'' +
+                ", destinyCity='" + destinyCity + '\'' +
+                ", date=" + date +
+                ", planeName='" + planeName + '\'' +
+                ", cantSeats=" + cantSeats +
+                ", isFull=" + isFull +
+                '}';
+    }
 }

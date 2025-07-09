@@ -8,16 +8,19 @@ public class UserDomain {
     private String email;
     private String password;
 
+    private List<TicketDomain> tickets;
+
     private List<ReservationDomain> reservationDomains;
 
     public UserDomain() {
     }
 
-    public UserDomain(Long id, String username, String email, String password, List<ReservationDomain> reservationDomains) {
+    public UserDomain(Long id, String username, String email, String password, List<TicketDomain> tickets, List<ReservationDomain> reservationDomains) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.tickets = tickets;
         this.reservationDomains = reservationDomains;
     }
 
@@ -41,6 +44,10 @@ public class UserDomain {
         return reservationDomains;
     }
 
+    public List<TicketDomain> getTickets() {
+        return tickets;
+    }
+
     @Override
     public String toString() {
         return "UserDomain{" +
@@ -48,7 +55,6 @@ public class UserDomain {
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", reservationDomains=" + reservationDomains +
                 '}';
     }
 }

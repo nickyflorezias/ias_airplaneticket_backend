@@ -7,6 +7,7 @@ import java.util.List;
 public interface ReservationRepositoryGateway {
     List<ReservationDomain> findAllByUserId(Long userId);
     ReservationDomain findById(Long reservationId);
-    ReservationDomain save(ReservationDomain reservationDomain);
+    ReservationDomain save(Long userId, ReservationDomain reservationDomain, Long ticketId);
+    ReservationDomain update(Long reservationId, ReservationDomain reservationDomain);
     String deleteById(Long reservationId);
 }

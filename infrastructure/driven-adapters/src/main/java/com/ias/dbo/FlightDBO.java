@@ -13,6 +13,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -49,21 +52,25 @@ public class FlightDBO {
                 domain.getTickets() != null ? domain.getTickets().stream()
                         .map(ticketDomain -> new TicketDBO(
                                 ticketDomain.getId(),
-                                ticketDomain.getDate(),
+                                ticketDomain.getSeat(),
                                 null,
-                                ticketDomain.getReservation() != null ? new ReservationDBO(
-                                        ticketDomain.getReservation().getId(),
-                                        ticketDomain.getReservation().getDate(),
-                                        ticketDomain.getReservation().isEnabled(),
-                                        ticketDomain.getReservation().getUserDomain() != null ? new UserDBO(
-                                                ticketDomain.getReservation().getUserDomain().getId(),
-                                                ticketDomain.getReservation().getUserDomain().getUsername(),
-                                                ticketDomain.getReservation().getUserDomain().getEmail(),
-                                                ticketDomain.getReservation().getUserDomain().getPassword(),
-                                                null
-                                        ) : null,
+                                ticketDomain.getUser() != null ? new UserDBO(
+                                        ticketDomain.getUser().getId(),
+                                        ticketDomain.getUser().getUsername(),
+                                        ticketDomain.getUser().getEmail(),
+                                        ticketDomain.getUser().getPassword(),
+                                        null,
                                         null
-                                ): null
+                                ) : null,
+                                ticketDomain.getReservation() != null ? ticketDomain.getReservation().stream()
+                                        .map(reservationDomain -> new ReservationDBO(
+                                                reservationDomain.getId(),
+                                                reservationDomain.getDate(),
+                                                reservationDomain.isEnabled(),
+                                                reservationDomain.getDescription(),
+                                                null,
+                                                null
+                                        )).toList() : null
                         )).toList(): new ArrayList<>()
         );
     }
@@ -81,22 +88,27 @@ public class FlightDBO {
                 getTicketDomains() != null ? getTicketDomains().stream()
                         .map(ticketDBO -> new TicketDomain(
                                 ticketDBO.getId(),
-                                ticketDBO.getDate(),
+                                ticketDBO.getSeat(),
                                 null,
-                                ticketDBO.getReservation() != null ? new ReservationDomain(
-                                        ticketDBO.getReservation().getId(),
-                                        ticketDBO.getReservation().getDate(),
-                                        ticketDBO.getReservation().isEnabled(),
-                                        ticketDBO.getReservation().getUser() != null ? new UserDomain(
-                                                ticketDBO.getReservation().getUser().getId(),
-                                                ticketDBO.getReservation().getUser().getUsername(),
-                                                ticketDBO.getReservation().getUser().getEmail(),
-                                                ticketDBO.getReservation().getUser().getPassword(),
-                                                null
-                                        ) : null,
+                                ticketDBO.getUser() != null ? new UserDomain(
+                                        ticketDBO.getUser().getId(),
+                                        ticketDBO.getUser().getUsername(),
+                                        ticketDBO.getUser().getEmail(),
+                                        ticketDBO.getUser().getPassword(),
+                                        null,
                                         null
-                                ) : null
-                        )).toList() : new ArrayList<>()
+                                ) : null,
+                                ticketDBO.getReservation() != null ? ticketDBO.getReservation().stream()
+                                        .map(reservationDBO -> new ReservationDomain(
+                                                reservationDBO.getId(),
+                                                reservationDBO.getDate(),
+                                                reservationDBO.isEnabled(),
+                                                reservationDBO.getDescription(),
+                                                null,
+                                                null
+                                                )).toList() : null
+                                )
+                        ).toList() : null
         );
     }
 }

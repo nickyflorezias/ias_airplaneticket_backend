@@ -1,20 +1,23 @@
 package com.ias;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class TicketDomain {
     private Long id;
-    private LocalDateTime date;
+    private String seat;
     private FlightDomain flightDomain;
-    private ReservationDomain reservationDomain;
+    private UserDomain user;
+    private List<ReservationDomain> reservationDomain;
 
     public TicketDomain() {
     }
 
-    public TicketDomain(Long id, LocalDateTime date, FlightDomain flightDomain, ReservationDomain reservationDomain) {
+    public TicketDomain(Long id, String seat, FlightDomain flightDomain, UserDomain user, List<ReservationDomain> reservationDomain) {
         this.id = id;
-        this.date = date;
+        this.seat = seat;
         this.flightDomain = flightDomain;
+        this.user = user;
         this.reservationDomain = reservationDomain;
     }
 
@@ -22,15 +25,40 @@ public class TicketDomain {
         return id;
     }
 
-    public LocalDateTime getDate() {
-        return date;
-    }
 
     public FlightDomain getFlight() {
         return flightDomain;
     }
 
-    public ReservationDomain getReservation() {
+    public List<ReservationDomain> getReservation() {
         return reservationDomain;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setFlightDomain(FlightDomain flightDomain) {
+        this.flightDomain = flightDomain;
+    }
+
+    public void setReservationDomain(List<ReservationDomain> reservationDomain) {
+        this.reservationDomain = reservationDomain;
+    }
+
+    public String getSeat() {
+        return seat;
+    }
+
+    public void setSeat(String seat) {
+        this.seat = seat;
+    }
+
+    public UserDomain getUser() {
+        return user;
+    }
+
+    public void setUser(UserDomain user) {
+        this.user = user;
     }
 }

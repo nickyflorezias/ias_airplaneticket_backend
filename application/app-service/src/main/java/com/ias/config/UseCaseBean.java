@@ -25,12 +25,12 @@ public class UseCaseBean {
     }
 
     @Bean
-    public TicketUseCase ticketUseCase(TicketRepositoryGateway ticketRepositoryGateway, FlightRepositoryGateway flightRepositoryGateway){
-        return new TicketUseCase(ticketRepositoryGateway, flightRepositoryGateway);
+    public TicketUseCase ticketUseCase(TicketRepositoryGateway ticketRepositoryGateway, FlightRepositoryGateway flightRepositoryGateway, UserRepositoryGateway userRepositoryGateway){
+        return new TicketUseCase(ticketRepositoryGateway, flightRepositoryGateway, userRepositoryGateway);
     }
 
     @Bean
-    public ReservationUseCase reservationUseCase(ReservationRepositoryGateway reservationRepositoryGateway){
-        return new ReservationUseCase(reservationRepositoryGateway);
+    public ReservationUseCase reservationUseCase(UserRepositoryGateway userRepositoryGateway, ReservationRepositoryGateway reservationRepositoryGateway, TicketRepositoryGateway ticketRepositoryGateway){
+        return new ReservationUseCase(reservationRepositoryGateway, userRepositoryGateway, ticketRepositoryGateway);
     }
 }
