@@ -6,15 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.logging.Logger;
+import java.util.List;
 
 
 @RestController
 @RequestMapping("/reservation")
 public class ReservationController {
-
-    private final static Logger logger = Logger.getLogger(ReservationController.class.getName());
-
     private final ReservationUseCase reservationUseCase;
 
     public ReservationController(ReservationUseCase reservationUseCase) {
@@ -23,21 +20,24 @@ public class ReservationController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<ResponseDTO> getReservationsByUserId(@PathVariable Long userId){
+        List<ReservationDomain> reservationsResponse = reservationUseCase.getAllReservationsByUserId(userId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
-                        reservationUseCase.getAllReservationsByUserId(userId),
+                        reservationsResponse.stream()
+                                .map(ReservationDTO::fromDomain).toList(),
                         HttpStatus.OK,
                         "Get all reservations with user id " + userId
                 ));
     }
 
     @GetMapping("/{reservationId}")
-    public ResponseEntity<ResponseDTO> getReservationsById(@PathVariable Long reservationId){
+    public ResponseEntity<ResponseDTO> getReservationById(@PathVariable Long reservationId){
+        ReservationDomain reservationResponse = reservationUseCase.getById(reservationId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
-                        reservationUseCase.getById(reservationId),
+                        ReservationDTO.fromDomain(reservationResponse),
                         HttpStatus.OK,
                         "Get all reservations with id " + reservationId
                 ));
@@ -45,30 +45,23 @@ public class ReservationController {
 
     @PostMapping("/{userId}/{ticketId}")
     public ResponseEntity<ResponseDTO> createReservation(@PathVariable Long userId, @RequestBody ReservationDTO reservation, @PathVariable Long ticketId){
-        logger.info(reservation.toString());
-        ReservationDomain reservationDomain = new ReservationDomain(
-                null,
-                reservation.getDate(),
-                true,
-                reservation.getDescription(),
-                null,
-                null
-        );
+        ReservationDomain reservationResponse = reservationUseCase.createReservation(userId, reservation.toDomain(), ticketId);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDTO(
-                        reservationUseCase.createReservation(userId, reservationDomain, ticketId),
+                        ReservationDTO.fromDomain(reservationResponse),
                         HttpStatus.CREATED,
-                        "Reservation created to Date " + reservationDomain.getDate()
+                        "Reservation created to Date " + reservationResponse.getDate()
                 ));
     }
 
     @PutMapping("/{reservationId}")
     public ResponseEntity<ResponseDTO> cancelReservation(@PathVariable Long reservationId){
+        ReservationDomain reservationResponse = reservationUseCase.cancelReservation(reservationId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
-                        reservationUseCase.cancelReservation(reservationId),
+                        ReservationDTO.fromDomain(reservationResponse),
                         HttpStatus.OK,
                         "Reservation canceled successfully."
                 ));
@@ -76,10 +69,11 @@ public class ReservationController {
 
     @PutMapping("/date/{reservationId}")
     public ResponseEntity<ResponseDTO> updateDateReservation(@PathVariable Long reservationId, @RequestBody ReservationDTO reservation){
+        ReservationDomain reservationResponse = reservationUseCase.updateDate(reservationId, reservation.getDate());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
-                        reservationUseCase.updateDate(reservationId, reservation.getDate()),
+                        ReservationDTO.fromDomain(reservationResponse),
                         HttpStatus.OK,
                         "Reservation date updated successfully to " + reservation.getDate()
                 ));

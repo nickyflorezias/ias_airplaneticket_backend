@@ -20,10 +20,12 @@ public class FlightController {
 
     @GetMapping
     public ResponseEntity<ResponseDTO> getAllFlights(){
+        List<FlightDomain> domainResponse = flightUseCase.getAllFlights();
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
-                        flightUseCase.getAllFlights(),
+                        domainResponse.stream()
+                                .map(FlightDTO::fromDomain).toList(),
                         HttpStatus.OK,
                         "All Flights."
                 ));
@@ -31,31 +33,23 @@ public class FlightController {
 
     @GetMapping("/{flightId}")
     public ResponseEntity<ResponseDTO> getFlightById(@PathVariable Long flightId){
+        FlightDomain flight = flightUseCase.getFlightById(flightId);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
-                        flightUseCase.getFlightById(flightId),
+                        FlightDTO.fromDomain(flight),
                         HttpStatus.OK,
                         "Get Flight by id."
                 ));
     }
     @PostMapping
     public ResponseEntity<ResponseDTO> createFlight(@RequestBody FlightDTO flightDomain){
-        FlightDomain flight = new FlightDomain(
-                null,
-                flightDomain.getName(),
-                flightDomain.getOriginCity(),
-                flightDomain.getDestinyCity(),
-                flightDomain.getDate(),
-                flightDomain.getPlaneName(),
-                flightDomain.getCantSeats(),
-                false,
-                null
-        );
+        FlightDomain domainResponse = flightUseCase.createFlight(flightDomain.toDomain());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
-                        flightUseCase.createFlight(flight),
+                        FlightDTO.fromDomain(domainResponse),
                         HttpStatus.CREATED,
                         "Flight created successfully."
                 ));
