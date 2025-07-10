@@ -7,4 +7,5 @@ public interface UserRepositoryGateway {
     UserDomain findById(Long userId);
     UserDomain findByEmail(String email);
     UserDomain findByUsername(String username);
+    String login(UserDomain userDomain);
 }

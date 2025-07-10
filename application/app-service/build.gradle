@@ -31,6 +31,7 @@ dependencies {
     implementation project(':driven-adapters')
     implementation project(':helpers')
     implementation project(':exception')
+    implementation project(':security')
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
