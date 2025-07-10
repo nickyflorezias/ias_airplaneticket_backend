@@ -61,4 +61,15 @@ public class TicketDomain {
     public void setUser(UserDomain user) {
         this.user = user;
     }
+
+    @Override
+    public String toString() {
+        return "TicketDomain{" +
+                "id=" + id +
+                ", seat='" + seat + '\'' +
+                ", flightDomain=" + flightDomain +
+                ", user=" + user +
+                ", reservationDomain=" + reservationDomain +
+                '}';
+    }
 }

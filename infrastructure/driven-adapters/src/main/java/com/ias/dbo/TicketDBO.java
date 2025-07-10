@@ -27,7 +27,7 @@ public class TicketDBO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "seat", unique = true)
+    @Column(name = "seat")
     private String seat;
 
     @ManyToOne
