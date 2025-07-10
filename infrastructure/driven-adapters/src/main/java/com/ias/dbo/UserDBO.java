@@ -65,7 +65,17 @@ public class UserDBO {
                                 reservationDomain.getTicket() != null ? new TicketDBO(
                                         reservationDomain.getTicket().getId(),
                                         reservationDomain.getTicket().getSeat(),
-                                        null,
+                                        reservationDomain.getTicket().getFlight() != null ? new FlightDBO(
+                                                reservationDomain.getTicket().getFlight().getId(),
+                                                reservationDomain.getTicket().getFlight().getName(),
+                                                reservationDomain.getTicket().getFlight().getOriginCity(),
+                                                reservationDomain.getTicket().getFlight().getDestinyCity(),
+                                                reservationDomain.getTicket().getFlight().getDate(),
+                                                reservationDomain.getTicket().getFlight().getPlaneName(),
+                                                reservationDomain.getTicket().getFlight().getCantSeats(),
+                                                reservationDomain.getTicket().getFlight().isFull(),
+                                                null
+                                        ) : null,
                                         null,
                                         null
                                 ) : null
@@ -96,7 +106,17 @@ public class UserDBO {
                                 reservationDBO.getTicket() != null ? new TicketDomain(
                                         reservationDBO.getTicket().getId(),
                                         reservationDBO.getTicket().getSeat(),
-                                        null,
+                                        reservationDBO.getTicket().getFlight() != null ? new FlightDomain(
+                                                reservationDBO.getTicket().getFlight().getId(),
+                                                reservationDBO.getTicket().getFlight().getName(),
+                                                reservationDBO.getTicket().getFlight().getOriginCity(),
+                                                reservationDBO.getTicket().getFlight().getDestinyCity(),
+                                                reservationDBO.getTicket().getFlight().getDate(),
+                                                reservationDBO.getTicket().getFlight().getPlaneName(),
+                                                reservationDBO.getTicket().getFlight().getCantSeats(),
+                                                reservationDBO.getTicket().getFlight().isFull(),
+                                                null
+                                        ) : null,
                                         null,
                                         null
                                 ) : null

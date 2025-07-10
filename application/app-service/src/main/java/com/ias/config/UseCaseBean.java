@@ -30,7 +30,7 @@ public class UseCaseBean {
     }
 
     @Bean
-    public ReservationUseCase reservationUseCase(UserRepositoryGateway userRepositoryGateway, ReservationRepositoryGateway reservationRepositoryGateway, TicketRepositoryGateway ticketRepositoryGateway){
-        return new ReservationUseCase(reservationRepositoryGateway, userRepositoryGateway, ticketRepositoryGateway);
+    public ReservationUseCase reservationUseCase(ReservationRepositoryGateway reservationRepositoryGateway, FlightRepositoryGateway flightRepositoryGateway){
+        return new ReservationUseCase(reservationRepositoryGateway, flightRepositoryGateway);
     }
 }

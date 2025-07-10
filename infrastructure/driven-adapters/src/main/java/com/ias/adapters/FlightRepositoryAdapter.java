@@ -7,6 +7,7 @@ import com.ias.repositories.FlightRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -39,5 +40,12 @@ public class FlightRepositoryAdapter implements FlightRepositoryGateway {
     @Transactional
     public FlightDomain save(FlightDomain flightDomain) {
         return flightRepository.save(FlightDBO.fromDomain(flightDomain)).toDomain();
+    }
+
+    @Override
+    @Transactional
+    public List<FlightDomain> findAllByDate(LocalDateTime date) {
+        return flightRepository.findAllByDate(date)
+                .stream().map(FlightDBO::toDomain).toList();
     }
 }

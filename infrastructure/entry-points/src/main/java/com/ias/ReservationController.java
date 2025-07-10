@@ -73,4 +73,15 @@ public class ReservationController {
                         "Reservation canceled successfully."
                 ));
     }
+
+    @PutMapping("/date/{reservationId}")
+    public ResponseEntity<ResponseDTO> updateDateReservation(@PathVariable Long reservationId, @RequestBody ReservationDTO reservation){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDTO(
+                        reservationUseCase.updateDate(reservationId, reservation.getDate()),
+                        HttpStatus.OK,
+                        "Reservation date updated successfully to " + reservation.getDate()
+                ));
+    }
 }

@@ -9,5 +9,4 @@ public interface TicketRepositoryGateway {
     List<TicketDomain> findAllTicketsByFlightId(Long flightId);
     TicketDomain findById(Long ticketId);
     TicketDomain save(Long flightId, TicketDomain ticketDomain);
-    List<TicketDomain> findAllById(List<Long> ids);
 }

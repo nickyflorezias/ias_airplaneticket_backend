@@ -11,9 +11,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Builder
 @NoArgsConstructor
@@ -127,7 +124,17 @@ public class ReservationDBO {
                 this.ticket != null ? new TicketDomain(
                         this.ticket.getId(),
                         this.ticket.getSeat(),
-                        this.ticket.toDomain().getFlight(),
+                        this.ticket.getFlight() != null ? new FlightDomain(
+                                this.ticket.getFlight().getId(),
+                                this.ticket.getFlight().getName(),
+                                this.ticket.getFlight().getOriginCity(),
+                                this.ticket.getFlight().getDestinyCity(),
+                                this.ticket.getFlight().getDate(),
+                                this.ticket.getFlight().getPlaneName(),
+                                this.ticket.getFlight().getCantSeats(),
+                                this.ticket.getFlight().isFull(),
+                                null
+                        ) : null,
                         null,
                         null
                 ) : null

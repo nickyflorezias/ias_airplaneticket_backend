@@ -1,9 +1,9 @@
 package com.ias;
 
+import com.ias.gateway.FlightRepositoryGateway;
 import com.ias.gateway.ReservationRepositoryGateway;
-import com.ias.gateway.TicketRepositoryGateway;
-import com.ias.gateway.UserRepositoryGateway;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -12,13 +12,11 @@ public class ReservationUseCase {
     Logger logger = Logger.getLogger(ReservationUseCase.class.getName());
 
     private final ReservationRepositoryGateway reservationRepositoryGateway;
-    private final UserRepositoryGateway userRepositoryGateway;
-    private final TicketRepositoryGateway ticketRepositoryGateway;
+    private final FlightRepositoryGateway flightRepositoryGateway;
 
-    public ReservationUseCase(ReservationRepositoryGateway reservationRepositoryGateway, UserRepositoryGateway userRepositoryGateway, TicketRepositoryGateway ticketRepositoryGateway) {
+    public ReservationUseCase(ReservationRepositoryGateway reservationRepositoryGateway, FlightRepositoryGateway flightRepositoryGateway) {
         this.reservationRepositoryGateway = reservationRepositoryGateway;
-        this.userRepositoryGateway = userRepositoryGateway;
-        this.ticketRepositoryGateway = ticketRepositoryGateway;
+        this.flightRepositoryGateway = flightRepositoryGateway;
     }
 
     public List<ReservationDomain> getAllReservationsByUserId(Long userId){
@@ -43,5 +41,19 @@ public class ReservationUseCase {
         }
         reservationFounded.setEnabled(false);
         return reservationRepositoryGateway.update(reservationId, reservationFounded);
+    }
+
+    public ReservationDomain updateDate(Long reservationId, LocalDateTime newDate){
+        ReservationDomain reservationFounded = getById(reservationId);
+
+        List<FlightDomain> flights = flightRepositoryGateway.findAllByDate(newDate);
+
+        if(flights.isEmpty()){
+            throw new NonFlightAvailableException("No flights available to date " + newDate);
+        }else{
+            reservationFounded.setDate(newDate);
+            reservationFounded.getTicket().setFlightDomain(flights.stream().findFirst().get());
+        }
+        return reservationRepositoryGateway.updateDate(reservationId, reservationFounded, newDate);
     }
 }

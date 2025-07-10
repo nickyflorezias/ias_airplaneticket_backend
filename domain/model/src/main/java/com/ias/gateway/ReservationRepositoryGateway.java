@@ -2,6 +2,7 @@ package com.ias.gateway;
 
 import com.ias.ReservationDomain;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ReservationRepositoryGateway {
@@ -9,5 +10,5 @@ public interface ReservationRepositoryGateway {
     ReservationDomain findById(Long reservationId);
     ReservationDomain save(Long userId, ReservationDomain reservationDomain, Long ticketId);
     ReservationDomain update(Long reservationId, ReservationDomain reservationDomain);
-    String deleteById(Long reservationId);
+    ReservationDomain updateDate(Long reservationId, ReservationDomain reservationDomain, LocalDateTime newDate);
 }

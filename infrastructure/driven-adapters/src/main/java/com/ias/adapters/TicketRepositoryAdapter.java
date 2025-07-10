@@ -1,12 +1,10 @@
 package com.ias.adapters;
 
 import com.ias.TicketDomain;
-import com.ias.dbo.FlightDBO;
 import com.ias.dbo.TicketDBO;
 import com.ias.gateway.FlightRepositoryGateway;
 import com.ias.gateway.TicketRepositoryGateway;
 import com.ias.gateway.UserRepositoryGateway;
-import com.ias.repositories.FlightRepository;
 import com.ias.repositories.TicketRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
@@ -57,14 +55,5 @@ public class TicketRepositoryAdapter implements TicketRepositoryGateway {
     public TicketDomain save(Long flightId, TicketDomain ticketDomain) {
         flightRepository.findById(flightId);
         return ticketRepository.save(TicketDBO.fromDomain(ticketDomain)).toDomain();
-    }
-
-    @Override
-    @Transactional
-    public List<TicketDomain> findAllById(List<Long> ids) {
-        return ticketRepository.findAllById(ids)
-                .stream()
-                .map(TicketDBO::toDomain)
-                .toList();
     }
 }
