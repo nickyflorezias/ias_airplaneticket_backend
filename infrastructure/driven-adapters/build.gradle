@@ -11,6 +11,11 @@ repositories {
     mavenCentral()
 }
 
+springBoot {
+    mainClass = 'com.ias.AirplaneTicketApplication'
+}
+
+
 dependencies {
 
     implementation project(':model')
