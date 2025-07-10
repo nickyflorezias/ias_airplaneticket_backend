@@ -30,31 +30,40 @@ public class FlightUseCase {
             throw new IllegalArgumentException("Invalid: all arguments must not be null.");
         }
 
-        isValid(flightDomain);
+        validNameIsOnlyText(flightDomain.getName());
+        validNameIsLongerThanThirty(flightDomain.getName());
+        validDateIsBefore(flightDomain.getDate());
+        validOriginCityEqualsDestiny(flightDomain.getOriginCity(), flightDomain.getDestinyCity());
 
-        logger.fine("Creating flight with = " + flightDomain.toString());
+        logger.fine("Creating flight with = " + flightDomain);
         return flightRepositoryGateway.save(flightDomain);
     }
 
-    private void isValid(FlightDomain flightDomain){
-        if(!flightDomain.getName().matches("^[A-Za-z]+$")){
-            logger.severe("Flight name is not valid, pattern invalid = " + flightDomain.getName());
-            throw new UserIllegalArgumentException("Flight name must be only text.");
+    private void validNameIsOnlyText(String name){
+        if(!name.matches("^[A-Za-z]+$")){
+            logger.severe("Flight name is not valid, pattern invalid = " + name);
+            throw new FlightIllegalArgumentException("Flight name must be only text.");
         }
+    }
 
-        if(flightDomain.getName().length() > 30){
-            logger.severe("Flight name is not valid, can't be longer than 30 characters =" + flightDomain.getName());
-            throw new UserIllegalArgumentException("Flight name can't be longer than 30 characters");
+    public void validNameIsLongerThanThirty(String name){
+        if(!name.matches("^.{1,30}$")){
+            logger.severe("Flight name is not valid, can't be longer than 30 characters =" + name);
+            throw new FlightIllegalArgumentException("Flight name can't be longer than 30 characters");
         }
+    }
 
-        if(flightDomain.getOriginCity().equals(flightDomain.getDestinyCity())){
-            logger.severe("Flight OriginCity can't be equal to DestinationCity." + flightDomain.getOriginCity() + " " + flightDomain.getDestinyCity());
+    public void validDateIsBefore(LocalDateTime date){
+        if(date.isBefore(LocalDateTime.now())){
+            logger.severe("Flight date cant be before now " + date);
+            throw new FlightIllegalArgumentException("Flight date can't be before now.");
+        }
+    }
+
+    public void validOriginCityEqualsDestiny(String originCity, String destinyCity){
+        if(originCity.equals(destinyCity)){
+            logger.severe("Flight OriginCity can't be equal to DestinationCity." + originCity + " " + destinyCity);
             throw new FlightIllegalArgumentException("OriginCity can't be equal to DestinationCity.");
-        }
-
-        if(flightDomain.getDate().isBefore(LocalDateTime.now())){
-            logger.severe("Flight date cant be before now" + flightDomain.getDate());
-            throw new FlightIllegalArgumentException("Date can't be before now.");
         }
     }
 }

@@ -22,18 +22,12 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO> registerUser(@RequestBody @JsonView(UserDTO.Views.Register.class) UserDTO user){
-        UserDomain userDomain = new UserDomain(
-                null,
-                user.getUsername(),
-                user.getEmail(),
-                user.getPassword(),
-                null,
-                null
-        );
+
+        UserDomain domainResponse = userUseCase.registerUser(user.toDomain());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDTO(
-                        userUseCase.registerUser(userDomain),
+                        UserDTO.fromDomain(domainResponse),
                         HttpStatus.CREATED,
                         "User registered successfully."
                 ));
@@ -41,18 +35,10 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<ResponseDTO> loginUser(@RequestBody @JsonView(UserDTO.Views.Login.class) UserDTO user){
-        UserDomain userDomain = new UserDomain(
-                null,
-                null,
-                user.getEmail(),
-                user.getPassword(),
-                null,
-                null
-        );
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDTO(
-                        userUseCase.loginUser(userDomain),
+                        userUseCase.loginUser(user.toDomain()),
                         HttpStatus.OK,
                         "User logged successfully."
                 ));

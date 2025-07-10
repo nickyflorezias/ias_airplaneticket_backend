@@ -1,7 +1,6 @@
 package com.ias;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class ReservationDomain {
     private Long id;
@@ -59,15 +58,11 @@ public class ReservationDomain {
         isEnabled = enabled;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public void setUserDomain(UserDomain userDomain) {
         this.userDomain = userDomain;
     }
 
-    public void setTicketDomains(TicketDomain ticketDomains) {
+    public void setTicketDomain(TicketDomain ticketDomains) {
         this.ticketDomains = ticketDomains;
     }
 

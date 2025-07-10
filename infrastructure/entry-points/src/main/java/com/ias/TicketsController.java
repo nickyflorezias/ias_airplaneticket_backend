@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/tickets")
 public class TicketsController {
@@ -17,23 +19,15 @@ public class TicketsController {
         this.ticketUseCase = ticketUseCase;
     }
 
-    @GetMapping("/reservations/{reservationId}")
-    public ResponseEntity<ResponseDTO> getAllTicketsByReservationId(@PathVariable Long reservationId){
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new ResponseDTO(
-                        ticketUseCase.getAllTicketsByReservationId(reservationId),
-                        HttpStatus.OK,
-                        "Get tickets with reservation id " + reservationId
-                ));
-    }
-
     @GetMapping("/flights/{flightId}")
     public ResponseEntity<ResponseDTO> getAllTicketsByFlightId(@PathVariable Long flightId){
+        List<TicketDomain> ticketResponse = ticketUseCase.getAllTicketsByFlightId(flightId);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
-                        ticketUseCase.getAllTicketsByFlightId(flightId),
+                        ticketResponse.stream()
+                                .map(TicketDTO::fromDomain).toList(),
                         HttpStatus.OK,
                         "Get tickets with flight id " + flightId
                 ));
@@ -41,17 +35,11 @@ public class TicketsController {
 
     @PostMapping("/{flightId}")
     public ResponseEntity<ResponseDTO> createTicket(@PathVariable Long flightId, @RequestBody @Valid TicketDTO ticketDomain){
-        TicketDomain ticket = new TicketDomain(
-                null,
-                ticketDomain.getSeat(),
-                null,
-                null,
-                null
-        );
+        TicketDomain ticketResponse = ticketUseCase.createTicket(flightId, ticketDomain.toDomain());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDTO(
-                        ticketUseCase.createTicket(flightId, ticket),
+                        TicketDTO.fromDomain(ticketResponse),
                         HttpStatus.CREATED,
                         "Created ticket successfully."
                 ));

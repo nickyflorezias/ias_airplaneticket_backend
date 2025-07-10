@@ -2,6 +2,8 @@ package com.ias;
 
 import com.ias.gateway.FlightRepositoryGateway;
 import com.ias.gateway.ReservationRepositoryGateway;
+import com.ias.gateway.TicketRepositoryGateway;
+import com.ias.gateway.UserRepositoryGateway;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,10 +15,14 @@ public class ReservationUseCase {
 
     private final ReservationRepositoryGateway reservationRepositoryGateway;
     private final FlightRepositoryGateway flightRepositoryGateway;
+    private final UserRepositoryGateway userRepositoryGateway;
+    private final TicketRepositoryGateway ticketRepositoryGateway;
 
-    public ReservationUseCase(ReservationRepositoryGateway reservationRepositoryGateway, FlightRepositoryGateway flightRepositoryGateway) {
+    public ReservationUseCase(ReservationRepositoryGateway reservationRepositoryGateway, FlightRepositoryGateway flightRepositoryGateway, UserRepositoryGateway userRepositoryGateway, TicketRepositoryGateway ticketRepositoryGateway) {
         this.reservationRepositoryGateway = reservationRepositoryGateway;
         this.flightRepositoryGateway = flightRepositoryGateway;
+        this.userRepositoryGateway = userRepositoryGateway;
+        this.ticketRepositoryGateway = ticketRepositoryGateway;
     }
 
     public List<ReservationDomain> getAllReservationsByUserId(Long userId){
@@ -30,7 +36,12 @@ public class ReservationUseCase {
     }
 
     public ReservationDomain createReservation(Long userId, ReservationDomain reservationDomain, Long ticketId){
-        logger.info("Create reservation with " + reservationDomain.toString());
+        UserDomain userFounded = userRepositoryGateway.findById(userId);
+        TicketDomain ticket = ticketRepositoryGateway.findById(ticketId);
+
+        reservationDomain.setUserDomain(userFounded);
+        reservationDomain.setTicketDomain(ticket);
+        logger.info("Create reservation with " + reservationDomain);
         return reservationRepositoryGateway.save(userId, reservationDomain, ticketId);
     }
 
@@ -46,6 +57,10 @@ public class ReservationUseCase {
     public ReservationDomain updateDate(Long reservationId, LocalDateTime newDate){
         ReservationDomain reservationFounded = getById(reservationId);
 
+        if(!reservationFounded.isEnabled()){
+            throw new ReservationAlreadyCanceledException("The reservation is already canceled, can't be updated");
+        }
+
         List<FlightDomain> flights = flightRepositoryGateway.findAllByDate(newDate);
 
         if(flights.isEmpty()){
@@ -53,6 +68,7 @@ public class ReservationUseCase {
         }else{
             reservationFounded.setDate(newDate);
             reservationFounded.getTicket().setFlightDomain(flights.stream().findFirst().get());
+            ticketRepositoryGateway.save(reservationFounded.getTicket().getFlight().getId(), reservationFounded.getTicket());
         }
         return reservationRepositoryGateway.updateDate(reservationId, reservationFounded, newDate);
     }
