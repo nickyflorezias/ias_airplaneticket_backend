@@ -5,20 +5,24 @@ import com.ias.dbo.UserDBO;
 import com.ias.gateway.UserRepositoryGateway;
 import com.ias.repositories.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepositoryAdapter implements UserRepositoryGateway {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserRepositoryAdapter(UserRepository userRepository) {
+    public UserRepositoryAdapter(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     @Transactional
     public UserDomain save(UserDomain userDomain) {
+        userDomain.setPassword(passwordEncoder.encode(userDomain.getPassword()));
         return userRepository.save(UserDBO.fromDomain(userDomain)).toDomain();
     }
 
@@ -41,6 +45,20 @@ public class UserRepositoryAdapter implements UserRepositoryGateway {
     @Override
     @Transactional
     public UserDomain findByUsername(String username) {
-        return null;
+        return userRepository.findByUsername(username)
+                .map(UserDBO::toDomain)
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+    }
+
+    @Override
+    @Transactional
+    public String login(UserDomain userDomain) {
+        UserDomain userFounded = findByEmail(userDomain.getEmail());
+
+        if(!passwordEncoder.matches(userDomain.getPassword(), userFounded.getPassword())){
+            throw new IllegalArgumentException("Password doesn't match.");
+        }
+
+        return "Logged";
     }
 }

@@ -30,13 +30,7 @@ public class UserUseCase {
     }
 
     public String loginUser(UserDomain userDomain){
-        UserDomain userFounded = userRepositoryGateway.findByEmail(userDomain.getEmail());
-
-        if(!userDomain.getPassword().equals(userFounded.getPassword())){
-            logger.severe("Password doesn't match with input " + userDomain.getPassword() + " and saved: " + userFounded.getPassword());
-            throw new IllegalArgumentException("Password doesn't match.");
-        }
-        return "Logged jwt";
+        return userRepositoryGateway.login(userDomain);
     }
 
     private void validUsernameLongerThanThirty(String username){

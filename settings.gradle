@@ -7,6 +7,7 @@ include ':entry-points'
 include ':driven-adapters'
 include ':helpers'
 include ':exception'
+include ':security'
 
 project(':model').projectDir = file('./domain/model')
 project(':usecase').projectDir = file('./domain/usecase')
@@ -15,3 +16,4 @@ project(':entry-points').projectDir = file('./infrastructure/entry-points')
 project(':driven-adapters').projectDir = file('./infrastructure/driven-adapters')
 project(':helpers').projectDir = file('./infrastructure/helpers')
 project(':exception').projectDir = file('./domain/exception')
+project(':security').projectDir = file('./infrastructure/security')
