@@ -1,6 +1,6 @@
 package com.ias;
 
-import com.ias.gateway.FlightRepositoryGateway;
+import com.ias.gateway.flight.FlightRepositoryFindGateway;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,35 +8,35 @@ import java.util.logging.Logger;
 
 public class FlightUseCase {
 
-    private final FlightRepositoryGateway flightRepositoryGateway;
+    private final FlightService flightService;
+
+    private final FlightRepositoryFindGateway flightRepositoryFindGateway;
 
     private static final Logger logger = Logger.getLogger(FlightUseCase.class.getName());
 
-    public FlightUseCase(FlightRepositoryGateway flightRepositoryGateway) {
-        this.flightRepositoryGateway = flightRepositoryGateway;
+    public FlightUseCase(FlightService flightService,
+                         FlightRepositoryFindGateway flightRepositoryFindGateway) {
+        this.flightService = flightService;
+        this.flightRepositoryFindGateway = flightRepositoryFindGateway;
     }
 
     public List<FlightDomain> getAllFlights(){
         logger.info("Get all flights");
-        return flightRepositoryGateway.findAll();
+        return flightRepositoryFindGateway.findAll();
     }
 
     public FlightDomain getFlightById(Long flightId){
-        return flightRepositoryGateway.findById(flightId);
+        return flightService.getFlightById(flightId);
     }
 
     public FlightDomain createFlight(FlightDomain flightDomain){
-        if(flightDomain.getName() == null || flightDomain.getDate() == null || flightDomain.getOriginCity() == null || flightDomain.getDestinyCity() == null){
-            throw new IllegalArgumentException("Invalid: all arguments must not be null.");
-        }
-
         validNameIsOnlyText(flightDomain.getName());
         validNameIsLongerThanThirty(flightDomain.getName());
         validDateIsBefore(flightDomain.getDate());
         validOriginCityEqualsDestiny(flightDomain.getOriginCity(), flightDomain.getDestinyCity());
 
         logger.fine("Creating flight with = " + flightDomain);
-        return flightRepositoryGateway.save(flightDomain);
+        return flightService.saveFlight(flightDomain);
     }
 
     private void validNameIsOnlyText(String name){

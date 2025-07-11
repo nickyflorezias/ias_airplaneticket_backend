@@ -2,7 +2,8 @@ package com.ias.adapters;
 
 import com.ias.FlightDomain;
 import com.ias.dbo.FlightDBO;
-import com.ias.gateway.FlightRepositoryGateway;
+import com.ias.gateway.flight.FlightRepositoryFindGateway;
+import com.ias.gateway.flight.FlightRepositorySaveGateway;
 import com.ias.repositories.FlightRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class FlightRepositoryAdapter implements FlightRepositoryGateway {
+public class FlightRepositoryAdapter implements FlightRepositoryFindGateway, FlightRepositorySaveGateway {
 
     private final FlightRepository flightRepository;
 

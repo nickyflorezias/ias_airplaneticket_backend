@@ -1,47 +1,53 @@
 package com.ias;
 
-import com.ias.gateway.FlightRepositoryGateway;
-import com.ias.gateway.TicketRepositoryGateway;
+import com.ias.gateway.ticket.TicketRepositoryFindGateway;
+import com.ias.gateway.ticket.TicketRepositorySaveGateway;
 
 import java.util.List;
 
 public class TicketUseCase {
-    private final TicketRepositoryGateway ticketRepositoryGateway;
-    private final FlightRepositoryGateway flightRepositoryGateway;
+    private final FlightService flightService;
 
-    public TicketUseCase(TicketRepositoryGateway ticketRepositoryGateway, FlightRepositoryGateway flightRepositoryGateway) {
-        this.ticketRepositoryGateway = ticketRepositoryGateway;
-        this.flightRepositoryGateway = flightRepositoryGateway;
+    private final TicketRepositoryFindGateway ticketRepositoryFindGateway;
+    private final TicketRepositorySaveGateway ticketRepositorySaveGateway;
+
+    public TicketUseCase(FlightService flightService,
+                         TicketRepositoryFindGateway ticketRepositoryFindGateway,
+                         TicketRepositorySaveGateway ticketRepositorySaveGateway) {
+        this.flightService = flightService;
+        this.ticketRepositoryFindGateway = ticketRepositoryFindGateway;
+        this.ticketRepositorySaveGateway = ticketRepositorySaveGateway;
     }
 
     public List<TicketDomain> getAllTicketsByFlightId(Long flightId){
-        FlightDomain flightDomain = flightRepositoryGateway.findById(flightId);
-
-        return ticketRepositoryGateway.findAllTicketsByFlightId(flightDomain.getId());
+        FlightDomain flightDomain = flightService.getFlightById(flightId);
+        return ticketRepositoryFindGateway.findAllTicketsByFlightId(flightDomain.getId());
     }
 
     public TicketDomain createTicket(Long flightId, TicketDomain ticketDomain) {
-        FlightDomain flightDomain = flightRepositoryGateway.findById(flightId);
+        FlightDomain flightDomain = flightService.getFlightById(flightId);
 
-        if (flightDomain.isFull()) {
-            throw new FlightFullException("The flight is full.");
-        }
+        validateFlightIsFull(flightDomain);
+        setFullToFlight(flightDomain);
+        setFlightToTicket(ticketDomain, flightDomain);
 
-        TicketDomain ticket = new TicketDomain(
-                ticketDomain.getId(),
-                ticketDomain.getSeat() != null ? ticketDomain.getSeat() : null,
-                flightDomain,
-                null,
-                ticketDomain.getReservation() != null ? ticketDomain.getReservation() : null
-        );
+        return ticketRepositorySaveGateway.save(flightId, ticketDomain);
+    }
 
-        TicketDomain savedTicket = ticketRepositoryGateway.save(flightId, ticket);
-
+    public void setFullToFlight(FlightDomain flightDomain){
         if (flightDomain.getTickets().size() + 1 >= flightDomain.getCantSeats()) {
             flightDomain.setFull(true);
-            flightRepositoryGateway.save(flightDomain);
+            flightService.saveFlight(flightDomain);
         }
+    }
 
-        return savedTicket;
+    private void setFlightToTicket(TicketDomain ticketDomain, FlightDomain flightDomain){
+        ticketDomain.setFlightDomain(flightDomain);
+    }
+
+    public void validateFlightIsFull(FlightDomain flightDomain){
+        if(flightDomain.isFull()){
+            throw new FlightFullException("The flight is full.");
+        }
     }
 }

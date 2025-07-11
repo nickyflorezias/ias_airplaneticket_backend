@@ -2,8 +2,8 @@ package com.ias.adapters;
 
 import com.ias.TicketDomain;
 import com.ias.dbo.TicketDBO;
-import com.ias.gateway.FlightRepositoryGateway;
-import com.ias.gateway.TicketRepositoryGateway;
+import com.ias.gateway.ticket.TicketRepositoryFindGateway;
+import com.ias.gateway.ticket.TicketRepositorySaveGateway;
 import com.ias.repositories.TicketRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
@@ -11,14 +11,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class TicketRepositoryAdapter implements TicketRepositoryGateway {
+public class TicketRepositoryAdapter implements TicketRepositoryFindGateway, TicketRepositorySaveGateway {
 
     private final TicketRepository ticketRepository;
-    private final FlightRepositoryGateway flightRepository;
 
-    public TicketRepositoryAdapter(TicketRepository ticketRepository, FlightRepositoryGateway flightRepository) {
+    public TicketRepositoryAdapter(TicketRepository ticketRepository) {
         this.ticketRepository = ticketRepository;
-        this.flightRepository = flightRepository;
     }
 
     @Override
@@ -42,7 +40,6 @@ public class TicketRepositoryAdapter implements TicketRepositoryGateway {
     @Override
     @Transactional
     public TicketDomain save(Long flightId, TicketDomain ticketDomain) {
-        flightRepository.findById(flightId);
         return ticketRepository.save(TicketDBO.fromDomain(ticketDomain)).toDomain();
     }
 }

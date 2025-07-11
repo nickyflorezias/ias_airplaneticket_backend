@@ -1,11 +1,10 @@
-package com.ias.gateway;
+package com.ias.gateway.ticket;
 
 import com.ias.TicketDomain;
 
 import java.util.List;
 
-public interface TicketRepositoryGateway {
+public interface TicketRepositoryFindGateway {
     List<TicketDomain> findAllTicketsByFlightId(Long flightId);
     TicketDomain findById(Long ticketId);
-    TicketDomain save(Long flightId, TicketDomain ticketDomain);
 }

@@ -1,13 +1,12 @@
-package com.ias.gateway;
+package com.ias.gateway.flight;
 
 import com.ias.FlightDomain;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface FlightRepositoryGateway {
+public interface FlightRepositoryFindGateway {
     List<FlightDomain> findAll();
     FlightDomain findById(Long flightId);
-    FlightDomain save(FlightDomain flightDomain);
     List<FlightDomain> findAllByDate(LocalDateTime date);
 }
