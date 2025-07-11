@@ -2,25 +2,29 @@ package com.ias;
 
 import com.ias.dto.ResponseDTO;
 import com.ias.dto.request.FlightDTO;
+import com.ias.flight.FlightUseCaseFindAllImpl;
+import com.ias.flight.FlightUseCaseFindByIdImpl;
+import com.ias.flight.FlightUseCaseSaveImpl;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@AllArgsConstructor
+
 @RestController
 @RequestMapping("/flights")
 public class FlightController {
 
-    private final FlightUseCase flightUseCase;
-
-    public FlightController(FlightUseCase flightUseCase) {
-        this.flightUseCase = flightUseCase;
-    }
+    private final FlightUseCaseFindAllImpl flightUseCaseFindAll;
+    private final FlightUseCaseFindByIdImpl flightUseCaseFindById;
+    private final FlightUseCaseSaveImpl flightUseCaseSave;
 
     @GetMapping
     public ResponseEntity<ResponseDTO> getAllFlights(){
-        List<FlightDomain> domainResponse = flightUseCase.getAllFlights();
+        List<FlightDomain> domainResponse = flightUseCaseFindAll.getAllFlights();
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
@@ -33,7 +37,7 @@ public class FlightController {
 
     @GetMapping("/{flightId}")
     public ResponseEntity<ResponseDTO> getFlightById(@PathVariable Long flightId){
-        FlightDomain flight = flightUseCase.getFlightById(flightId);
+        FlightDomain flight = flightUseCaseFindById.getFlightById(flightId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -45,7 +49,7 @@ public class FlightController {
     }
     @PostMapping
     public ResponseEntity<ResponseDTO> createFlight(@RequestBody FlightDTO flightDomain){
-        FlightDomain domainResponse = flightUseCase.createFlight(flightDomain.toDomain());
+        FlightDomain domainResponse = flightUseCaseSave.createFlight(flightDomain.toDomain());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(

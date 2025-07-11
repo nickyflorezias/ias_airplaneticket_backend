@@ -2,25 +2,30 @@ package com.ias;
 
 import com.ias.dto.request.ReservationDTO;
 import com.ias.dto.ResponseDTO;
+import com.ias.reservation.*;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@AllArgsConstructor
 
 @RestController
 @RequestMapping("/reservation")
 public class ReservationController {
-    private final ReservationUseCase reservationUseCase;
 
-    public ReservationController(ReservationUseCase reservationUseCase) {
-        this.reservationUseCase = reservationUseCase;
-    }
+    private final ReservationUseCaseFindByIdImpl reservationUseCaseFindById;
+    private final ReservationUseCaseFindByUserIdImpl reservationUseCaseFindByUserId;
+    private final ReservationUseCaseSaveImpl reservationUseCaseSave;
+    private final ReservationUseCaseUpdateImpl reservationUseCaseUpdate;
+    private final ReservationUseCaseUpdateDateImpl reservationUseCaseUpdateDate;
+
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<ResponseDTO> getReservationsByUserId(@PathVariable Long userId){
-        List<ReservationDomain> reservationsResponse = reservationUseCase.getAllReservationsByUserId(userId);
+        List<ReservationDomain> reservationsResponse = reservationUseCaseFindByUserId.findByUserId(userId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
@@ -33,7 +38,7 @@ public class ReservationController {
 
     @GetMapping("/{reservationId}")
     public ResponseEntity<ResponseDTO> getReservationById(@PathVariable Long reservationId){
-        ReservationDomain reservationResponse = reservationUseCase.getById(reservationId);
+        ReservationDomain reservationResponse = reservationUseCaseFindById.findById(reservationId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
@@ -45,7 +50,7 @@ public class ReservationController {
 
     @PostMapping("/{userId}/{ticketId}")
     public ResponseEntity<ResponseDTO> createReservation(@PathVariable Long userId, @RequestBody ReservationDTO reservation, @PathVariable Long ticketId){
-        ReservationDomain reservationResponse = reservationUseCase.createReservation(userId, reservation.toDomain(), ticketId);
+        ReservationDomain reservationResponse = reservationUseCaseSave.createReservation(userId, reservation.toDomain(), ticketId);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDTO(
@@ -57,7 +62,7 @@ public class ReservationController {
 
     @PutMapping("/{reservationId}")
     public ResponseEntity<ResponseDTO> cancelReservation(@PathVariable Long reservationId){
-        ReservationDomain reservationResponse = reservationUseCase.cancelReservation(reservationId);
+        ReservationDomain reservationResponse = reservationUseCaseUpdate.cancelReservation(reservationId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
@@ -69,7 +74,7 @@ public class ReservationController {
 
     @PutMapping("/date/{reservationId}")
     public ResponseEntity<ResponseDTO> updateDateReservation(@PathVariable Long reservationId, @RequestBody ReservationDTO reservation){
-        ReservationDomain reservationResponse = reservationUseCase.updateDate(reservationId, reservation.getDate());
+        ReservationDomain reservationResponse = reservationUseCaseUpdateDate.updateDate(reservationId, reservation.getDate());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(

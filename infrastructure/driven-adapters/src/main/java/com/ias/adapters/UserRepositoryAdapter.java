@@ -2,16 +2,14 @@ package com.ias.adapters;
 
 import com.ias.UserDomain;
 import com.ias.dbo.UserDBO;
-import com.ias.gateway.user.UserRepositoryFindGateway;
-import com.ias.gateway.user.UserRepositoryLoginGateway;
-import com.ias.gateway.user.UserRepositorySaveGateway;
+import com.ias.gateway.user.*;
 import com.ias.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserRepositoryAdapter implements UserRepositoryFindGateway, UserRepositorySaveGateway, UserRepositoryLoginGateway {
+public class UserRepositoryAdapter implements UserRepositoryFindByIdGateway, UserRepositoryFindByEmailGateway, UserRepositoryFindByUsernameGateway, UserRepositorySaveGateway, UserRepositoryLoginGateway {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;

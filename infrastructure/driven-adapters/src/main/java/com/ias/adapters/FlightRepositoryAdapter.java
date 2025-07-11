@@ -2,7 +2,9 @@ package com.ias.adapters;
 
 import com.ias.FlightDomain;
 import com.ias.dbo.FlightDBO;
-import com.ias.gateway.flight.FlightRepositoryFindGateway;
+import com.ias.gateway.flight.FlightRepositoryFindAllByDateGateway;
+import com.ias.gateway.flight.FlightRepositoryFindAllGateway;
+import com.ias.gateway.flight.FlightRepositoryFindByIdGateway;
 import com.ias.gateway.flight.FlightRepositorySaveGateway;
 import com.ias.repositories.FlightRepository;
 import jakarta.transaction.Transactional;
@@ -12,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class FlightRepositoryAdapter implements FlightRepositoryFindGateway, FlightRepositorySaveGateway {
+public class FlightRepositoryAdapter implements FlightRepositoryFindByIdGateway, FlightRepositoryFindAllGateway, FlightRepositoryFindAllByDateGateway, FlightRepositorySaveGateway {
 
     private final FlightRepository flightRepository;
 

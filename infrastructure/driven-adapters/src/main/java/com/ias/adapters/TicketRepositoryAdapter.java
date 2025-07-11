@@ -2,22 +2,22 @@ package com.ias.adapters;
 
 import com.ias.TicketDomain;
 import com.ias.dbo.TicketDBO;
-import com.ias.gateway.ticket.TicketRepositoryFindGateway;
+import com.ias.gateway.ticket.TicketRepositoryFindAllTicketsByFlightIdGateway;
+import com.ias.gateway.ticket.TicketRepositoryFindByIdGateway;
 import com.ias.gateway.ticket.TicketRepositorySaveGateway;
 import com.ias.repositories.TicketRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@AllArgsConstructor
+
 @Repository
-public class TicketRepositoryAdapter implements TicketRepositoryFindGateway, TicketRepositorySaveGateway {
+public class TicketRepositoryAdapter implements TicketRepositoryFindByIdGateway, TicketRepositoryFindAllTicketsByFlightIdGateway, TicketRepositorySaveGateway {
 
     private final TicketRepository ticketRepository;
-
-    public TicketRepositoryAdapter(TicketRepository ticketRepository) {
-        this.ticketRepository = ticketRepository;
-    }
 
     @Override
     @Transactional
