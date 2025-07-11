@@ -1,6 +1,10 @@
 package com.ias.config;
 
 import com.ias.ReservationService;
+import com.ias.adapters.FlightRepositoryAdapter;
+import com.ias.adapters.ReservationRepositoryAdapter;
+import com.ias.adapters.TicketRepositoryAdapter;
+import com.ias.adapters.UserRepositoryAdapter;
 import com.ias.gateway.flight.FlightRepositoryFindAllByDateGateway;
 import com.ias.gateway.reservation.*;
 import com.ias.gateway.ticket.TicketRepositoryFindByIdGateway;
@@ -19,35 +23,35 @@ public class ReservationUseCase {
     }
 
     @Bean
-    public ReservationUseCaseFindByIdImpl reservationUseCaseFindById(ReservationRepositoryFindByIdGateway reservationRepositoryFindByIdGateway){
+    public ReservationUseCaseFindByIdImpl reservationUseCaseFindById(ReservationRepositoryAdapter reservationRepositoryFindByIdGateway){
         return new ReservationUseCaseFindByIdImpl(reservationRepositoryFindByIdGateway);
     }
 
     @Bean
-    public ReservationUseCaseFindByUserIdImpl reservationUseCaseFindByUserId(ReservationRepositoryFindByUserIdGateway reservationRepositoryFindByUserIdGateway){
+    public ReservationUseCaseFindByUserIdImpl reservationUseCaseFindByUserId(ReservationRepositoryAdapter reservationRepositoryFindByUserIdGateway){
         return new ReservationUseCaseFindByUserIdImpl(reservationRepositoryFindByUserIdGateway);
     }
 
     @Bean
-    public ReservationUseCaseSaveImpl reservationUseCaseSave(ReservationRepositorySaveGateway reservationRepositorySaveGateway,
-                                                             UserRepositoryFindByIdGateway userRepositoryFindByIdGateway,
-                                                             TicketRepositoryFindByIdGateway ticketRepositoryFindByIdGateway){
+    public ReservationUseCaseSaveImpl reservationUseCaseSave(ReservationRepositoryAdapter reservationRepositorySaveGateway,
+                                                             UserRepositoryAdapter userRepositoryFindByIdGateway,
+                                                             TicketRepositoryAdapter ticketRepositoryFindByIdGateway){
         return new ReservationUseCaseSaveImpl(reservationRepositorySaveGateway, userRepositoryFindByIdGateway, ticketRepositoryFindByIdGateway);
     }
 
     @Bean
-    public ReservationUseCaseUpdateImpl reservationUseCaseUpdate(ReservationRepositoryUpdateGateway reservationRepositoryUpdateGateway,
-                                                                 ReservationRepositoryFindByIdGateway reservationRepositoryFindByIdGateway,
+    public ReservationUseCaseUpdateImpl reservationUseCaseUpdate(ReservationRepositoryAdapter reservationRepositoryUpdateGateway,
+                                                                 ReservationRepositoryAdapter reservationRepositoryFindByIdGateway,
                                                                  ReservationService reservationService){
         return new ReservationUseCaseUpdateImpl(reservationRepositoryUpdateGateway, reservationRepositoryFindByIdGateway, reservationService);
     }
 
     @Bean
-    public ReservationUseCaseUpdateDateImpl reservationUseCaseUpdateDate(ReservationRepositoryUpdateDateGateway reservationUseCaseUpdateDate,
-                                                                         ReservationRepositoryFindByIdGateway reservationRepositoryFindByIdGateway,
+    public ReservationUseCaseUpdateDateImpl reservationUseCaseUpdateDate(ReservationRepositoryAdapter reservationUseCaseUpdateDate,
+                                                                         ReservationRepositoryAdapter reservationRepositoryFindByIdGateway,
                                                                          ReservationService reservationService,
-                                                                         FlightRepositoryFindAllByDateGateway flightRepositoryFindAllByDateGateway,
-                                                                         TicketRepositorySaveGateway ticketRepositorySaveGateway){
+                                                                         FlightRepositoryAdapter flightRepositoryFindAllByDateGateway,
+                                                                         TicketRepositoryAdapter ticketRepositorySaveGateway){
         return new ReservationUseCaseUpdateDateImpl(reservationUseCaseUpdateDate,reservationRepositoryFindByIdGateway, reservationService, flightRepositoryFindAllByDateGateway, ticketRepositorySaveGateway);
     }
 }
