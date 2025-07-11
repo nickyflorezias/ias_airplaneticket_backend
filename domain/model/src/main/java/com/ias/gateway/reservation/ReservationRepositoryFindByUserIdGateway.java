@@ -4,7 +4,6 @@ import com.ias.ReservationDomain;
 
 import java.util.List;
 
-public interface ReservationRepositoryFindGateway {
+public interface ReservationRepositoryFindByUserIdGateway {
     List<ReservationDomain> findAllByUserId(Long userId);
-    ReservationDomain findById(Long reservationId);
 }

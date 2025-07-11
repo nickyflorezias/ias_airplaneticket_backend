@@ -3,11 +3,8 @@ package com.ias.adapters;
 import com.ias.ReservationDomain;
 import com.ias.dbo.ReservationDBO;
 import com.ias.dbo.UserDBO;
-import com.ias.gateway.reservation.ReservationRepositoryFindGateway;
-import com.ias.gateway.reservation.ReservationRepositorySaveGateway;
-import com.ias.gateway.reservation.ReservationRepositoryUpdateDateGateway;
-import com.ias.gateway.reservation.ReservationRepositoryUpdateGateway;
-import com.ias.gateway.user.UserRepositoryFindGateway;
+import com.ias.gateway.reservation.*;
+import com.ias.gateway.user.UserRepositoryFindByIdGateway;
 import com.ias.repositories.ReservationRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
@@ -16,20 +13,25 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class ReservationRepositoryAdapter implements ReservationRepositoryFindGateway, ReservationRepositorySaveGateway, ReservationRepositoryUpdateGateway, ReservationRepositoryUpdateDateGateway {
+public class ReservationRepositoryAdapter implements
+        ReservationRepositoryFindByIdGateway,
+        ReservationRepositoryFindByUserIdGateway,
+        ReservationRepositorySaveGateway,
+        ReservationRepositoryUpdateGateway,
+        ReservationRepositoryUpdateDateGateway {
 
     private final ReservationRepository reservationRepository;
-    private final UserRepositoryFindGateway userRepositoryFindGateway;
+    private final UserRepositoryFindByIdGateway userRepositoryFindByIdGateway;
 
-    public ReservationRepositoryAdapter(ReservationRepository reservationRepository, UserRepositoryFindGateway userRepositoryFindGateway) {
+    public ReservationRepositoryAdapter(ReservationRepository reservationRepository, UserRepositoryFindByIdGateway userRepositoryFindGateway) {
         this.reservationRepository = reservationRepository;
-        this.userRepositoryFindGateway = userRepositoryFindGateway;
+        this.userRepositoryFindByIdGateway = userRepositoryFindGateway;
     }
 
     @Override
     @Transactional
     public List<ReservationDomain> findAllByUserId(Long userId) {
-        UserDBO userFounded = UserDBO.fromDomain(userRepositoryFindGateway.findById(userId));
+        UserDBO userFounded = UserDBO.fromDomain(userRepositoryFindByIdGateway.findById(userId));
         return userFounded.getReservation()
                 .stream()
                 .map(ReservationDBO::toDomain)

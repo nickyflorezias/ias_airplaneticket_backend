@@ -1,27 +1,19 @@
-package com.ias;
+package com.ias.ticket;
 
-import com.ias.gateway.ticket.TicketRepositoryFindGateway;
+import com.ias.FlightDomain;
+import com.ias.FlightFullException;
+import com.ias.FlightService;
+import com.ias.TicketDomain;
 import com.ias.gateway.ticket.TicketRepositorySaveGateway;
 
-import java.util.List;
+public class TicketUseCaseSaveImpl {
 
-public class TicketUseCase {
+    private final TicketRepositorySaveGateway ticketRepositorySaveGateway;
     private final FlightService flightService;
 
-    private final TicketRepositoryFindGateway ticketRepositoryFindGateway;
-    private final TicketRepositorySaveGateway ticketRepositorySaveGateway;
-
-    public TicketUseCase(FlightService flightService,
-                         TicketRepositoryFindGateway ticketRepositoryFindGateway,
-                         TicketRepositorySaveGateway ticketRepositorySaveGateway) {
-        this.flightService = flightService;
-        this.ticketRepositoryFindGateway = ticketRepositoryFindGateway;
+    public TicketUseCaseSaveImpl(TicketRepositorySaveGateway ticketRepositorySaveGateway, FlightService flightService) {
         this.ticketRepositorySaveGateway = ticketRepositorySaveGateway;
-    }
-
-    public List<TicketDomain> getAllTicketsByFlightId(Long flightId){
-        FlightDomain flightDomain = flightService.getFlightById(flightId);
-        return ticketRepositoryFindGateway.findAllTicketsByFlightId(flightDomain.getId());
+        this.flightService = flightService;
     }
 
     public TicketDomain createTicket(Long flightId, TicketDomain ticketDomain) {
@@ -33,7 +25,6 @@ public class TicketUseCase {
 
         return ticketRepositorySaveGateway.save(flightId, ticketDomain);
     }
-
     public void setFullToFlight(FlightDomain flightDomain){
         if (flightDomain.getTickets().size() + 1 >= flightDomain.getCantSeats()) {
             flightDomain.setFull(true);
@@ -50,4 +41,5 @@ public class TicketUseCase {
             throw new FlightFullException("The flight is full.");
         }
     }
+
 }
