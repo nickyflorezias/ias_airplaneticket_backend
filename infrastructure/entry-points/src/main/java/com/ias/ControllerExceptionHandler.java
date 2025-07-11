@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 @Hidden
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -74,6 +76,17 @@ public class ControllerExceptionHandler {
                         null,
                         HttpStatus.BAD_REQUEST,
                         illegalArgumentException.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<ResponseDTO> sQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException){
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new ResponseDTO(
+                        null,
+                        HttpStatus.CONFLICT,
+                        sqlIntegrityConstraintViolationException.getMessage().split("'")[0].trim()
                 ));
     }
 

@@ -1,39 +1,12 @@
 package com.ias;
 
-import com.ias.gateway.UserRepositoryGateway;
-
 import java.util.logging.Logger;
 
-public class UserUseCase {
+public class UserValidationService {
 
-    private final UserRepositoryGateway userRepositoryGateway;
+    private final Logger logger = Logger.getLogger(UserValidationService.class.getName());
 
-    private final Logger logger = Logger.getLogger(UserUseCase.class.getName());
-
-    public UserUseCase(UserRepositoryGateway userRepositoryGateway) {
-        this.userRepositoryGateway = userRepositoryGateway;
-    }
-
-    public UserDomain registerUser(UserDomain userDomain){
-        logger.fine("Register user with " + userDomain.toString());
-        logger.info("Register user");
-        if(userDomain.getUsername() == null || userDomain.getEmail() == null || userDomain.getPassword() == null){
-            throw new IllegalArgumentException("Invalid: all arguments must not be null.");
-        }
-
-        validUsernameOnlyText(userDomain.getUsername());
-        validUsernameLongerThanThirty(userDomain.getUsername());
-        validEmailPattern(userDomain.getEmail());
-        validPasswordPattern(userDomain.getPassword());
-
-        return userRepositoryGateway.save(userDomain);
-    }
-
-    public String loginUser(UserDomain userDomain){
-        return userRepositoryGateway.login(userDomain);
-    }
-
-    private void validUsernameLongerThanThirty(String username){
+    public void validUsernameLongerThanThirty(String username){
         if(!username.matches("^.{1,30}$")){
             logger.severe("User Username not valid, can't be longer than 30 characters " + username);
             throw new UserIllegalArgumentException("Username can't be longer than 30 characters");

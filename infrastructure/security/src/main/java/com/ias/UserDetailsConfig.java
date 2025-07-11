@@ -1,6 +1,6 @@
 package com.ias;
 
-import com.ias.gateway.UserRepositoryGateway;
+import com.ias.gateway.user.UserRepositoryFindByUsernameGateway;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,17 +12,15 @@ import java.util.ArrayList;
 @Service
 public class UserDetailsConfig implements UserDetailsService {
 
-    private final UserRepositoryGateway userRepository;
+    private final UserRepositoryFindByUsernameGateway userRepositoryFindByUsernameGateway;
 
-    public UserDetailsConfig(UserRepositoryGateway userRepositoryGateway) {
-        this.userRepository = userRepositoryGateway;
+    public UserDetailsConfig(UserRepositoryFindByUsernameGateway userRepositoryFindByUsernameGateway) {
+        this.userRepositoryFindByUsernameGateway = userRepositoryFindByUsernameGateway;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDomain userDomain = userRepository.findByUsername(username);
-
-        System.out.println(userDomain);
+        UserDomain userDomain = userRepositoryFindByUsernameGateway.findByUsername(username);
         return new User(
                 userDomain.getUsername(),
                 userDomain.getPassword(),

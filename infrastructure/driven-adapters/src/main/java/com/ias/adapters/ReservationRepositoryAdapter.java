@@ -3,10 +3,8 @@ package com.ias.adapters;
 import com.ias.ReservationDomain;
 import com.ias.dbo.ReservationDBO;
 import com.ias.dbo.UserDBO;
-import com.ias.gateway.FlightRepositoryGateway;
-import com.ias.gateway.ReservationRepositoryGateway;
-import com.ias.gateway.TicketRepositoryGateway;
-import com.ias.gateway.UserRepositoryGateway;
+import com.ias.gateway.reservation.*;
+import com.ias.gateway.user.UserRepositoryFindByIdGateway;
 import com.ias.repositories.ReservationRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
@@ -15,24 +13,25 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class ReservationRepositoryAdapter implements ReservationRepositoryGateway {
+public class ReservationRepositoryAdapter implements
+        ReservationRepositoryFindByIdGateway,
+        ReservationRepositoryFindByUserIdGateway,
+        ReservationRepositorySaveGateway,
+        ReservationRepositoryUpdateGateway,
+        ReservationRepositoryUpdateDateGateway {
 
     private final ReservationRepository reservationRepository;
-    private final UserRepositoryGateway userRepositoryGateway;
-    private final TicketRepositoryGateway ticketRepositoryGateway;
-    private final FlightRepositoryGateway flightRepositoryGateway;
+    private final UserRepositoryFindByIdGateway userRepositoryFindByIdGateway;
 
-    public ReservationRepositoryAdapter(ReservationRepository reservationRepository, UserRepositoryGateway userRepositoryGateway, TicketRepositoryGateway ticketRepositoryGateway, FlightRepositoryGateway flightRepositoryGateway) {
+    public ReservationRepositoryAdapter(ReservationRepository reservationRepository, UserRepositoryFindByIdGateway userRepositoryFindGateway) {
         this.reservationRepository = reservationRepository;
-        this.userRepositoryGateway = userRepositoryGateway;
-        this.ticketRepositoryGateway = ticketRepositoryGateway;
-        this.flightRepositoryGateway = flightRepositoryGateway;
+        this.userRepositoryFindByIdGateway = userRepositoryFindGateway;
     }
 
     @Override
     @Transactional
     public List<ReservationDomain> findAllByUserId(Long userId) {
-        UserDBO userFounded = UserDBO.fromDomain(userRepositoryGateway.findById(userId));
+        UserDBO userFounded = UserDBO.fromDomain(userRepositoryFindByIdGateway.findById(userId));
         return userFounded.getReservation()
                 .stream()
                 .map(ReservationDBO::toDomain)
@@ -50,22 +49,18 @@ public class ReservationRepositoryAdapter implements ReservationRepositoryGatewa
     @Override
     @Transactional
     public ReservationDomain save(Long userId, ReservationDomain reservationDomain, Long ticketId) {
-        userRepositoryGateway.findById(userId);
-        ticketRepositoryGateway.findById(ticketId);
         return reservationRepository.save(ReservationDBO.fromDomain(reservationDomain)).toDomain();
     }
 
     @Override
     @Transactional
     public ReservationDomain update(Long reservationId, ReservationDomain reservationDomain) {
-        findById(reservationId);
         return reservationRepository.save(ReservationDBO.fromDomain(reservationDomain)).toDomain();
     }
 
     @Override
     @Transactional
     public ReservationDomain updateDate(Long reservationId, ReservationDomain reservationDomain, LocalDateTime newDate) {
-        flightRepositoryGateway.findAllByDate(newDate);
         return reservationRepository.save(ReservationDBO.fromDomain(reservationDomain)).toDomain();
     }
 }

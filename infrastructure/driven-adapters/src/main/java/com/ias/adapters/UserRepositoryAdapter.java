@@ -2,14 +2,14 @@ package com.ias.adapters;
 
 import com.ias.UserDomain;
 import com.ias.dbo.UserDBO;
-import com.ias.gateway.UserRepositoryGateway;
+import com.ias.gateway.user.*;
 import com.ias.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserRepositoryAdapter implements UserRepositoryGateway {
+public class UserRepositoryAdapter implements UserRepositoryFindByIdGateway, UserRepositoryFindByEmailGateway, UserRepositoryFindByUsernameGateway, UserRepositorySaveGateway, UserRepositoryLoginGateway {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -22,7 +22,7 @@ public class UserRepositoryAdapter implements UserRepositoryGateway {
     @Override
     @Transactional
     public UserDomain save(UserDomain userDomain) {
-        userDomain.setPassword(passwordEncoder.encode(userDomain.getPassword()));
+        encryptUserPassword(userDomain);
         return userRepository.save(UserDBO.fromDomain(userDomain)).toDomain();
     }
 
@@ -54,11 +54,17 @@ public class UserRepositoryAdapter implements UserRepositoryGateway {
     @Transactional
     public String login(UserDomain userDomain) {
         UserDomain userFounded = findByEmail(userDomain.getEmail());
+        passwordMatch(userDomain.getPassword(), userFounded.getPassword());
+        return "Logged";
+    }
 
-        if(!passwordEncoder.matches(userDomain.getPassword(), userFounded.getPassword())){
+    private void encryptUserPassword(UserDomain userDomain){
+        userDomain.setPassword(passwordEncoder.encode(userDomain.getPassword()));
+    }
+
+    private void passwordMatch(String rawPassword, String encodedPassword){
+        if(!passwordEncoder.matches(rawPassword, encodedPassword)){
             throw new IllegalArgumentException("Password doesn't match.");
         }
-
-        return "Logged";
     }
 }
