@@ -30,7 +30,8 @@ public class UserUseCaseBean {
     }
 
     @Bean
-    public UserUseCaseSaveImpl userUseCaseSave(UserRepositoryAdapter userRepositoryFindByIdGateway, UserValidationService userValidationService){
+    public UserUseCaseSaveImpl userUseCaseSave(UserRepositoryAdapter userRepositoryFindByIdGateway,
+                                               UserValidationService userValidationService){
         return new UserUseCaseSaveImpl(userRepositoryFindByIdGateway, userValidationService);
     }
 

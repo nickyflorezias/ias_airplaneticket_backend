@@ -23,7 +23,8 @@ public class TicketUseCaseBean {
     }
 
     @Bean
-    public TicketUseCaseSaveImpl ticketUseCaseSave(TicketRepositorySaveGateway ticketRepositorySaveGateway, FlightService flightService){
+    public TicketUseCaseSaveImpl ticketUseCaseSave(TicketRepositoryAdapter ticketRepositorySaveGateway,
+                                                   FlightService flightService){
         return new TicketUseCaseSaveImpl(ticketRepositorySaveGateway, flightService);
     }
 }
