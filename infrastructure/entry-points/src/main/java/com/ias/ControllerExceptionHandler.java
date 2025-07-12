@@ -4,6 +4,8 @@ import com.ias.dto.ResponseDTO;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -80,7 +82,7 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public ResponseEntity<ResponseDTO> sQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException){
+    public ResponseEntity<ResponseDTO> sQLIntegrityConstraintViolationExceptionHandler(SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException){
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(new ResponseDTO(
@@ -88,6 +90,24 @@ public class ControllerExceptionHandler {
                         HttpStatus.CONFLICT,
                         sqlIntegrityConstraintViolationException.getMessage().split("'")[0].trim()
                 ));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ResponseDTO> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException methodArgumentNotValidException){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(
+                        new ResponseDTO(
+                                null,
+                                HttpStatus.BAD_REQUEST,
+                                methodArgumentNotValidException.getBindingResult()
+                                        .getFieldErrors()
+                                        .stream()
+                                        .map(FieldError::getDefaultMessage)
+                                        .findFirst()
+                                        .orElse("Validation error")
+                        )
+                );
     }
 
 }

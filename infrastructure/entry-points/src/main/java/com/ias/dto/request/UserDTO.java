@@ -22,14 +22,14 @@ public class UserDTO {
     private Long id;
 
     @JsonView(Views.Register.class)
-    @NotNull @Size(min = 1, max = 30)
+    @NotNull(message = "Username can't be null") @Size(min = 1, max = 30, message = "Username should be longer than 0 but less than 31")
     private String username;
 
-    @NotNull @Email
+    @NotNull(message = "Email can't be null") @Email(message = "Email should be an email test@ias.com")
     @JsonView(Views.Login.class)
     private String email;
 
-    @NotNull @Size(min = 6)
+    @NotNull(message = "Password can't be null") @Size(min = 6, message = "Password length should be longer than 5")
     @JsonView(Views.Login.class)
     private String password;
 
@@ -49,7 +49,7 @@ public class UserDTO {
                 domain.getReservations() != null ? domain.getReservations().stream()
                         .map(reservationDomain -> new ReservationDTO(
                                 reservationDomain.getId(),
-                                reservationDomain.isEnabled(),
+                                reservationDomain.getStatus(),
                                 reservationDomain.getTicket() != null ? new TicketDTO(
                                         reservationDomain.getTicket().getId(),
                                         reservationDomain.getTicket().getFlight() != null ? new FlightDTO(
@@ -60,9 +60,12 @@ public class UserDTO {
                                                 reservationDomain.getTicket().getFlight().getDestinyCity(),
                                                 reservationDomain.getTicket().getFlight().getDate(),
                                                 reservationDomain.getTicket().getFlight().getPlaneName(),
+                                                reservationDomain.getTicket().getFlight().getType(),
+                                                reservationDomain.getTicket().getFlight().getAirlineName(),
                                                 reservationDomain.getTicket().getFlight().getCantSeats()
                                         ) : null,
-                                        reservationDomain.getTicket().getSeat()
+                                        reservationDomain.getTicket().getSeat(),
+                                        reservationDomain.getTicket().getSeatClass()
                                 ) : null,
                                 reservationDomain.getDate(),
                                 reservationDomain.getDescription()
