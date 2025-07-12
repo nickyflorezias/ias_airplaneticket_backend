@@ -4,6 +4,7 @@ import com.ias.FlightDomain;
 import com.ias.ReservationDomain;
 import com.ias.TicketDomain;
 import com.ias.UserDomain;
+import com.ias.enums.ReservationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +26,9 @@ public class ReservationDBO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime date;
-    private boolean isEnabled;
+
+    @Enumerated(value = EnumType.STRING)
+    private ReservationStatus status;
 
     private String description;
 
@@ -43,7 +46,7 @@ public class ReservationDBO {
         ReservationDBO reservationDBO = new ReservationDBO();
         reservationDBO.setId(domain.getId());
         reservationDBO.setDate(domain.getDate());
-        reservationDBO.setEnabled(domain.isEnabled());
+        reservationDBO.setStatus(domain.getStatus());
         reservationDBO.setDescription(domain.getDescription());
 
         if (domain.getUserDomain() != null) {
@@ -56,6 +59,7 @@ public class ReservationDBO {
                             .map(ticketDomain -> new TicketDBO(
                                     ticketDomain.getId(),
                                     ticketDomain.getSeat(),
+                                    ticketDomain.getSeatClass(),
                                     null,
                                     null,
                                     null
@@ -69,6 +73,7 @@ public class ReservationDBO {
                     new TicketDBO(
                             domain.getTicket().getId(),
                             domain.getTicket().getSeat(),
+                            domain.getTicket().getSeatClass(),
                             domain.getTicket().getFlight() != null ? new FlightDBO(
                                     domain.getTicket().getFlight().getId(),
                                     domain.getTicket().getFlight().getName(),
@@ -76,8 +81,10 @@ public class ReservationDBO {
                                     domain.getTicket().getFlight().getDestinyCity(),
                                     domain.getTicket().getFlight().getDate(),
                                     domain.getTicket().getFlight().getPlaneName(),
+                                    domain.getTicket().getFlight().getType(),
+                                    domain.getTicket().getFlight().getAirlineName(),
                                     domain.getTicket().getFlight().getCantSeats(),
-                                    domain.getTicket().getFlight().isFull(),
+                                    domain.getTicket().getFlight().getStatus(),
                                     null
                             ) : null,
                             null,
@@ -94,7 +101,7 @@ public class ReservationDBO {
         return new ReservationDomain(
                 this.id,
                 this.date,
-                this.isEnabled,
+                this.status,
                 this.description,
                 this.user != null ? new UserDomain(
                         this.user.getId(),
@@ -105,6 +112,7 @@ public class ReservationDBO {
                                 .map(ticketDBO -> new TicketDomain(
                                         ticketDBO.getId(),
                                         ticketDBO.getSeat(),
+                                        ticketDBO.getSeatClass(),
                                         ticketDBO.getFlight() != null ? new FlightDomain(
                                                 ticketDBO.getFlight().getId(),
                                                 ticketDBO.getFlight().getName(),
@@ -112,8 +120,10 @@ public class ReservationDBO {
                                                 ticketDBO.getFlight().getDestinyCity(),
                                                 ticketDBO.getFlight().getDate(),
                                                 ticketDBO.getFlight().getPlaneName(),
+                                                ticketDBO.getFlight().getFlightType(),
+                                                ticketDBO.getFlight().getAirlineName(),
                                                 ticketDBO.getFlight().getCantSeats(),
-                                                ticketDBO.getFlight().isFull(),
+                                                ticketDBO.getFlight().getStatus(),
                                                 null
                                         ) : null,
                                         null,
@@ -124,6 +134,7 @@ public class ReservationDBO {
                 this.ticket != null ? new TicketDomain(
                         this.ticket.getId(),
                         this.ticket.getSeat(),
+                        this.ticket.getSeatClass(),
                         this.ticket.getFlight() != null ? new FlightDomain(
                                 this.ticket.getFlight().getId(),
                                 this.ticket.getFlight().getName(),
@@ -131,8 +142,10 @@ public class ReservationDBO {
                                 this.ticket.getFlight().getDestinyCity(),
                                 this.ticket.getFlight().getDate(),
                                 this.ticket.getFlight().getPlaneName(),
+                                this.ticket.getFlight().getFlightType(),
+                                this.ticket.getFlight().getAirlineName(),
                                 this.ticket.getFlight().getCantSeats(),
-                                this.ticket.getFlight().isFull(),
+                                this.ticket.getFlight().getStatus(),
                                 null
                         ) : null,
                         null,

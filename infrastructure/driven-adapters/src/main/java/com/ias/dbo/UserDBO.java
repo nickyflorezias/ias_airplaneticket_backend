@@ -51,6 +51,7 @@ public class UserDBO {
                                 .map(ticketDomain -> new TicketDBO(
                                         ticketDomain.getId(),
                                         ticketDomain.getSeat(),
+                                        ticketDomain.getSeatClass(),
                                         null,
                                         null,
                                         null
@@ -59,12 +60,13 @@ public class UserDBO {
                         .map(reservationDomain -> new ReservationDBO(
                                 reservationDomain.getId(),
                                 reservationDomain.getDate(),
-                                reservationDomain.isEnabled(),
+                                reservationDomain.getStatus(),
                                 reservationDomain.getDescription(),
                                 null,
                                 reservationDomain.getTicket() != null ? new TicketDBO(
                                         reservationDomain.getTicket().getId(),
                                         reservationDomain.getTicket().getSeat(),
+                                        reservationDomain.getTicket().getSeatClass(),
                                         reservationDomain.getTicket().getFlight() != null ? new FlightDBO(
                                                 reservationDomain.getTicket().getFlight().getId(),
                                                 reservationDomain.getTicket().getFlight().getName(),
@@ -72,8 +74,10 @@ public class UserDBO {
                                                 reservationDomain.getTicket().getFlight().getDestinyCity(),
                                                 reservationDomain.getTicket().getFlight().getDate(),
                                                 reservationDomain.getTicket().getFlight().getPlaneName(),
+                                                reservationDomain.getTicket().getFlight().getType(),
+                                                reservationDomain.getTicket().getFlight().getAirlineName(),
                                                 reservationDomain.getTicket().getFlight().getCantSeats(),
-                                                reservationDomain.getTicket().getFlight().isFull(),
+                                                reservationDomain.getTicket().getFlight().getStatus(),
                                                 null
                                         ) : null,
                                         null,
@@ -92,6 +96,7 @@ public class UserDBO {
                                 .map(ticketDBO -> new TicketDomain(
                                         ticketDBO.getId(),
                                         ticketDBO.getSeat(),
+                                        ticketDBO.getSeatClass(),
                                         null,
                                         null,
                                         null
@@ -100,12 +105,13 @@ public class UserDBO {
                         .map(reservationDBO -> new ReservationDomain(
                                 reservationDBO.getId(),
                                 reservationDBO.getDate(),
-                                reservationDBO.isEnabled(),
+                                reservationDBO.getStatus(),
                                 reservationDBO.getDescription(),
                                 null,
                                 reservationDBO.getTicket() != null ? new TicketDomain(
                                         reservationDBO.getTicket().getId(),
                                         reservationDBO.getTicket().getSeat(),
+                                        reservationDBO.getTicket().getSeatClass(),
                                         reservationDBO.getTicket().getFlight() != null ? new FlightDomain(
                                                 reservationDBO.getTicket().getFlight().getId(),
                                                 reservationDBO.getTicket().getFlight().getName(),
@@ -113,8 +119,10 @@ public class UserDBO {
                                                 reservationDBO.getTicket().getFlight().getDestinyCity(),
                                                 reservationDBO.getTicket().getFlight().getDate(),
                                                 reservationDBO.getTicket().getFlight().getPlaneName(),
+                                                reservationDBO.getTicket().getFlight().getFlightType(),
+                                                reservationDBO.getTicket().getFlight().getAirlineName(),
                                                 reservationDBO.getTicket().getFlight().getCantSeats(),
-                                                reservationDBO.getTicket().getFlight().isFull(),
+                                                reservationDBO.getTicket().getFlight().getStatus(),
                                                 null
                                         ) : null,
                                         null,

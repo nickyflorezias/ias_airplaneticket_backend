@@ -1,5 +1,10 @@
 package com.ias;
 
+import com.ias.enums.AirlineName;
+import com.ias.enums.FlightStatus;
+import com.ias.enums.FlightType;
+import com.ias.enums.PlaneName;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -9,24 +14,28 @@ public class FlightDomain {
     private String originCity;
     private String destinyCity;
     private LocalDateTime date;
-    private String planeName;
+    private PlaneName planeName;
+    private FlightType type;
+    private AirlineName airlineName;
     private int cantSeats;
-    private boolean isFull;
+    private FlightStatus status;
 
     private List<TicketDomain> ticketDomains;
 
     public FlightDomain() {
     }
 
-    public FlightDomain(Long id, String name, String originCity, String destinyCity, LocalDateTime date, String planeName, int cantSeats, boolean isFull, List<TicketDomain> ticketDomains) {
+    public FlightDomain(Long id, String name, String originCity, String destinyCity, LocalDateTime date, PlaneName planeName, FlightType type, AirlineName airlineName, int cantSeats, FlightStatus status, List<TicketDomain> ticketDomains) {
         this.id = id;
         this.name = name;
         this.originCity = originCity;
         this.destinyCity = destinyCity;
         this.date = date;
         this.planeName = planeName;
+        this.type = type;
+        this.airlineName = airlineName;
         this.cantSeats = cantSeats;
-        this.isFull = isFull;
+        this.status = status;
         this.ticketDomains = ticketDomains;
     }
 
@@ -50,16 +59,24 @@ public class FlightDomain {
         return date;
     }
 
-    public String getPlaneName() {
+    public PlaneName getPlaneName() {
         return planeName;
+    }
+
+    public FlightType getType() {
+        return type;
+    }
+
+    public AirlineName getAirlineName() {
+        return airlineName;
     }
 
     public int getCantSeats() {
         return cantSeats;
     }
 
-    public boolean isFull() {
-        return isFull;
+    public FlightStatus getStatus() {
+        return status;
     }
 
     public List<TicketDomain> getTickets() {
@@ -70,36 +87,12 @@ public class FlightDomain {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setOriginCity(String originCity) {
-        this.originCity = originCity;
-    }
-
-    public void setDestinyCity(String destinyCity) {
-        this.destinyCity = destinyCity;
-    }
-
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
-    public void setPlaneName(String planeName) {
-        this.planeName = planeName;
-    }
-
-    public void setCantSeats(int cantSeats) {
-        this.cantSeats = cantSeats;
-    }
-
-    public void setFull(boolean full) {
-        isFull = full;
-    }
-
-    public void setTicketDomains(List<TicketDomain> ticketDomains) {
-        this.ticketDomains = ticketDomains;
+    public void setStatus(FlightStatus status) {
+        this.status = status;
     }
 
     @Override
@@ -112,7 +105,7 @@ public class FlightDomain {
                 ", date=" + date +
                 ", planeName='" + planeName + '\'' +
                 ", cantSeats=" + cantSeats +
-                ", isFull=" + isFull +
+                ", status=" + status +
                 '}';
     }
 }

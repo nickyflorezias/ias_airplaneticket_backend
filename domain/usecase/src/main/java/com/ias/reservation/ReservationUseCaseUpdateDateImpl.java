@@ -35,7 +35,7 @@ public class ReservationUseCaseUpdateDateImpl {
     public ReservationDomain updateDate(Long reservationId, LocalDateTime newDate){
         ReservationDomain reservationFounded = reservationRepositoryFindByIdGateway.findById(reservationId);
 
-        reservationService.reservationIsEnabled(reservationFounded);
+        reservationService.reservationStatusIsEnabled(reservationFounded);
 
         List<FlightDomain> flights = flightRepositoryFindAllByDateGateway.findAllByDate(newDate);
 
