@@ -6,10 +6,6 @@ import com.ias.flight.FlightUseCaseFindAllByDateImpl;
 import com.ias.flight.FlightUseCaseFindAllImpl;
 import com.ias.flight.FlightUseCaseFindByIdImpl;
 import com.ias.flight.FlightUseCaseSaveImpl;
-import com.ias.gateway.flight.FlightRepositoryFindAllByDateGateway;
-import com.ias.gateway.flight.FlightRepositoryFindAllGateway;
-import com.ias.gateway.flight.FlightRepositoryFindByIdGateway;
-import com.ias.gateway.flight.FlightRepositorySaveGateway;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,9 +14,8 @@ public class FlightUseCaseBean {
 
     @Bean
     public FlightService flightService(FlightRepositoryAdapter flightRepositoryFindByIdGateway,
-                                       FlightRepositoryAdapter flightRepositorySaveGateway,
-                                       FlightRepositoryAdapter flightRepositoryFindAllByDateGateway){
-        return new FlightService(flightRepositoryFindByIdGateway, flightRepositorySaveGateway, flightRepositoryFindAllByDateGateway);
+                                       FlightRepositoryAdapter flightRepositorySaveGateway){
+        return new FlightService(flightRepositoryFindByIdGateway, flightRepositorySaveGateway);
     }
 
     @Bean

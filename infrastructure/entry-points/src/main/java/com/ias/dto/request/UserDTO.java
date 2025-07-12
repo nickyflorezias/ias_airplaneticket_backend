@@ -54,7 +54,7 @@ public class UserDTO {
                                         reservationDomain.getTicket().getId(),
                                         reservationDomain.getTicket().getFlight() != null ? new FlightDTO(
                                                 reservationDomain.getTicket().getFlight().getId(),
-                                                reservationDomain.getTicket().getFlight().isFull(),
+                                                reservationDomain.getTicket().getFlight().getStatus(),
                                                 reservationDomain.getTicket().getFlight().getName(),
                                                 reservationDomain.getTicket().getFlight().getOriginCity(),
                                                 reservationDomain.getTicket().getFlight().getDestinyCity(),

@@ -3,6 +3,7 @@ package com.ias.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ias.enums.AirlineName;
 import com.ias.FlightDomain;
+import com.ias.enums.FlightStatus;
 import com.ias.enums.FlightType;
 import com.ias.enums.PlaneName;
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 public class FlightDTO {
 
     private Long id;
-    private boolean isFull;
+    private FlightStatus status;
     @NotNull @Size(min = 1, max = 30)
     private String name;
 
@@ -49,7 +50,7 @@ public class FlightDTO {
     public static FlightDTO fromDomain(FlightDomain flightDomain){
         return new FlightDTO(
                 flightDomain.getId(),
-                flightDomain.isFull(),
+                flightDomain.getStatus(),
                 flightDomain.getName(),
                 flightDomain.getOriginCity(),
                 flightDomain.getDestinyCity(),
@@ -72,7 +73,7 @@ public class FlightDTO {
                 getFlightType(),
                 getAirlineName(),
                 getCantSeats(),
-                isFull,
+                FlightStatus.AVAILABLE,
                 null
         );
     }

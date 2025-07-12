@@ -84,7 +84,7 @@ public class ReservationDBO {
                                     domain.getTicket().getFlight().getType(),
                                     domain.getTicket().getFlight().getAirlineName(),
                                     domain.getTicket().getFlight().getCantSeats(),
-                                    domain.getTicket().getFlight().isFull(),
+                                    domain.getTicket().getFlight().getStatus(),
                                     null
                             ) : null,
                             null,
@@ -123,7 +123,7 @@ public class ReservationDBO {
                                                 ticketDBO.getFlight().getFlightType(),
                                                 ticketDBO.getFlight().getAirlineName(),
                                                 ticketDBO.getFlight().getCantSeats(),
-                                                ticketDBO.getFlight().isFull(),
+                                                ticketDBO.getFlight().getStatus(),
                                                 null
                                         ) : null,
                                         null,
@@ -145,7 +145,7 @@ public class ReservationDBO {
                                 this.ticket.getFlight().getFlightType(),
                                 this.ticket.getFlight().getAirlineName(),
                                 this.ticket.getFlight().getCantSeats(),
-                                this.ticket.getFlight().isFull(),
+                                this.ticket.getFlight().getStatus(),
                                 null
                         ) : null,
                         null,

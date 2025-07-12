@@ -1,6 +1,7 @@
 package com.ias;
 
 import com.ias.enums.AirlineName;
+import com.ias.enums.FlightStatus;
 import com.ias.enums.FlightType;
 import com.ias.enums.PlaneName;
 
@@ -17,14 +18,14 @@ public class FlightDomain {
     private FlightType type;
     private AirlineName airlineName;
     private int cantSeats;
-    private boolean isFull;
+    private FlightStatus status;
 
     private List<TicketDomain> ticketDomains;
 
     public FlightDomain() {
     }
 
-    public FlightDomain(Long id, String name, String originCity, String destinyCity, LocalDateTime date, PlaneName planeName, FlightType type, AirlineName airlineName, int cantSeats, boolean isFull, List<TicketDomain> ticketDomains) {
+    public FlightDomain(Long id, String name, String originCity, String destinyCity, LocalDateTime date, PlaneName planeName, FlightType type, AirlineName airlineName, int cantSeats, FlightStatus status, List<TicketDomain> ticketDomains) {
         this.id = id;
         this.name = name;
         this.originCity = originCity;
@@ -34,7 +35,7 @@ public class FlightDomain {
         this.type = type;
         this.airlineName = airlineName;
         this.cantSeats = cantSeats;
-        this.isFull = isFull;
+        this.status = status;
         this.ticketDomains = ticketDomains;
     }
 
@@ -74,8 +75,8 @@ public class FlightDomain {
         return cantSeats;
     }
 
-    public boolean isFull() {
-        return isFull;
+    public FlightStatus getStatus() {
+        return status;
     }
 
     public List<TicketDomain> getTickets() {
@@ -90,8 +91,8 @@ public class FlightDomain {
         this.date = date;
     }
 
-    public void setFull(boolean full) {
-        isFull = full;
+    public void setStatus(FlightStatus status) {
+        this.status = status;
     }
 
     @Override
@@ -104,7 +105,7 @@ public class FlightDomain {
                 ", date=" + date +
                 ", planeName='" + planeName + '\'' +
                 ", cantSeats=" + cantSeats +
-                ", isFull=" + isFull +
+                ", status=" + status +
                 '}';
     }
 }

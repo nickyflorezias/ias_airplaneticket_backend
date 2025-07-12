@@ -56,7 +56,7 @@ public class TicketDBO {
                         domain.getFlight().getType(),
                         domain.getFlight().getAirlineName(),
                         domain.getFlight().getCantSeats(),
-                        domain.getFlight().isFull(),
+                        domain.getFlight().getStatus(),
                         domain.getFlight().getTickets() != null ? domain.getFlight().getTickets().stream()
                                 .map(ticketDomain -> new TicketDBO(
                                         ticketDomain.getId(),
@@ -102,7 +102,7 @@ public class TicketDBO {
                         getFlight().getFlightType(),
                         getFlight().getAirlineName(),
                         getFlight().getCantSeats(),
-                        getFlight().isFull(),
+                        getFlight().getStatus(),
                         getFlight().getTicketDomains() != null ? getFlight().getTicketDomains().stream()
                                 .map(ticketDBO -> new TicketDomain(
                                         ticketDBO.getId(),

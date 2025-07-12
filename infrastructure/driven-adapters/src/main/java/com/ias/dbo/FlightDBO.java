@@ -2,6 +2,7 @@ package com.ias.dbo;
 
 import com.ias.*;
 import com.ias.enums.AirlineName;
+import com.ias.enums.FlightStatus;
 import com.ias.enums.FlightType;
 import com.ias.enums.PlaneName;
 import jakarta.persistence.*;
@@ -40,7 +41,9 @@ public class FlightDBO {
     @Enumerated(value = EnumType.STRING)
     private AirlineName airlineName;
     private int cantSeats;
-    private boolean isFull;
+
+    @Enumerated(EnumType.STRING)
+    private FlightStatus status;
 
     @OneToMany(mappedBy = "flight")
     private List<TicketDBO> ticketDomains;
@@ -56,7 +59,7 @@ public class FlightDBO {
                 domain.getType(),
                 domain.getAirlineName(),
                 domain.getCantSeats(),
-                domain.isFull(),
+                domain.getStatus(),
                 domain.getTickets() != null ? domain.getTickets().stream()
                         .map(ticketDomain -> new TicketDBO(
                                 ticketDomain.getId(),
@@ -95,7 +98,7 @@ public class FlightDBO {
                 getFlightType(),
                 getAirlineName(),
                 getCantSeats(),
-                isFull(),
+                getStatus(),
                 getTicketDomains() != null ? getTicketDomains().stream()
                         .map(ticketDBO -> new TicketDomain(
                                 ticketDBO.getId(),

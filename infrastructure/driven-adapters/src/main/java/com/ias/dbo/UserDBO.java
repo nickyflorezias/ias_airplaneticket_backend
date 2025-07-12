@@ -77,7 +77,7 @@ public class UserDBO {
                                                 reservationDomain.getTicket().getFlight().getType(),
                                                 reservationDomain.getTicket().getFlight().getAirlineName(),
                                                 reservationDomain.getTicket().getFlight().getCantSeats(),
-                                                reservationDomain.getTicket().getFlight().isFull(),
+                                                reservationDomain.getTicket().getFlight().getStatus(),
                                                 null
                                         ) : null,
                                         null,
@@ -122,7 +122,7 @@ public class UserDBO {
                                                 reservationDBO.getTicket().getFlight().getFlightType(),
                                                 reservationDBO.getTicket().getFlight().getAirlineName(),
                                                 reservationDBO.getTicket().getFlight().getCantSeats(),
-                                                reservationDBO.getTicket().getFlight().isFull(),
+                                                reservationDBO.getTicket().getFlight().getStatus(),
                                                 null
                                         ) : null,
                                         null,
