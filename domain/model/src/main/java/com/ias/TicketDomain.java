@@ -1,11 +1,13 @@
 package com.ias;
 
-import java.time.LocalDateTime;
+import com.ias.enums.SeatClass;
+
 import java.util.List;
 
 public class TicketDomain {
     private Long id;
     private String seat;
+    private SeatClass seatClass;
     private FlightDomain flightDomain;
     private UserDomain user;
     private List<ReservationDomain> reservationDomain;
@@ -13,9 +15,10 @@ public class TicketDomain {
     public TicketDomain() {
     }
 
-    public TicketDomain(Long id, String seat, FlightDomain flightDomain, UserDomain user, List<ReservationDomain> reservationDomain) {
+    public TicketDomain(Long id, String seat, SeatClass seatClass, FlightDomain flightDomain, UserDomain user, List<ReservationDomain> reservationDomain) {
         this.id = id;
         this.seat = seat;
+        this.seatClass = seatClass;
         this.flightDomain = flightDomain;
         this.user = user;
         this.reservationDomain = reservationDomain;
@@ -34,6 +37,10 @@ public class TicketDomain {
         return reservationDomain;
     }
 
+    public SeatClass getSeatClass() {
+        return seatClass;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -48,10 +55,6 @@ public class TicketDomain {
 
     public String getSeat() {
         return seat;
-    }
-
-    public void setSeat(String seat) {
-        this.seat = seat;
     }
 
     public UserDomain getUser() {

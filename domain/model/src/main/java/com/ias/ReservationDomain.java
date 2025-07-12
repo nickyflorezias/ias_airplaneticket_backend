@@ -1,11 +1,13 @@
 package com.ias;
 
+import com.ias.enums.ReservationStatus;
+
 import java.time.LocalDateTime;
 
 public class ReservationDomain {
     private Long id;
     private LocalDateTime date;
-    private boolean isEnabled;
+    private ReservationStatus status;
     private String description;
     private UserDomain userDomain;
     private TicketDomain ticketDomains;
@@ -13,10 +15,10 @@ public class ReservationDomain {
     public ReservationDomain() {
     }
 
-    public ReservationDomain(Long id, LocalDateTime date, boolean isEnabled, String description, UserDomain userDomain, TicketDomain ticketDomains) {
+    public ReservationDomain(Long id, LocalDateTime date, ReservationStatus status, String description, UserDomain userDomain, TicketDomain ticketDomains) {
         this.id = id;
         this.date = date;
-        this.isEnabled = isEnabled;
+        this.status = status;
         this.description = description;
         this.userDomain = userDomain;
         this.ticketDomains = ticketDomains;
@@ -30,8 +32,8 @@ public class ReservationDomain {
         return date;
     }
 
-    public boolean isEnabled() {
-        return isEnabled;
+    public ReservationStatus getStatus() {
+        return status;
     }
 
     public UserDomain getUserDomain() {
@@ -54,8 +56,8 @@ public class ReservationDomain {
         this.date = date;
     }
 
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
+    public void setStatus(ReservationStatus status) {
+        this.status = status;
     }
 
     public void setUserDomain(UserDomain userDomain) {
@@ -71,7 +73,7 @@ public class ReservationDomain {
         return "ReservationDomain{" +
                 "id=" + id +
                 ", date=" + date +
-                ", isEnabled=" + isEnabled +
+                ", isEnabled=" + status +
                 '}';
     }
 }

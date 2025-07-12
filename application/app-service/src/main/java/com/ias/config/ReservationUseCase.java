@@ -11,6 +11,8 @@ import com.ias.gateway.ticket.TicketRepositoryFindByIdGateway;
 import com.ias.gateway.ticket.TicketRepositorySaveGateway;
 import com.ias.gateway.user.UserRepositoryFindByIdGateway;
 import com.ias.reservation.*;
+import com.ias.ticket.TicketUseCaseFindByIdImpl;
+import com.ias.user.UserUseCaseFindByIdImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -34,8 +36,8 @@ public class ReservationUseCase {
 
     @Bean
     public ReservationUseCaseSaveImpl reservationUseCaseSave(ReservationRepositoryAdapter reservationRepositorySaveGateway,
-                                                             UserRepositoryAdapter userRepositoryFindByIdGateway,
-                                                             TicketRepositoryAdapter ticketRepositoryFindByIdGateway){
+                                                             UserUseCaseFindByIdImpl userRepositoryFindByIdGateway,
+                                                             TicketUseCaseFindByIdImpl ticketRepositoryFindByIdGateway){
         return new ReservationUseCaseSaveImpl(reservationRepositorySaveGateway, userRepositoryFindByIdGateway, ticketRepositoryFindByIdGateway);
     }
 

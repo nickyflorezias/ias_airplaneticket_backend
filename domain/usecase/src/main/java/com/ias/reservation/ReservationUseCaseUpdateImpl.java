@@ -2,6 +2,7 @@ package com.ias.reservation;
 
 import com.ias.ReservationDomain;
 import com.ias.ReservationService;
+import com.ias.enums.ReservationStatus;
 import com.ias.gateway.reservation.ReservationRepositoryFindByIdGateway;
 import com.ias.gateway.reservation.ReservationRepositoryUpdateGateway;
 
@@ -19,8 +20,8 @@ public class ReservationUseCaseUpdateImpl {
 
     public ReservationDomain cancelReservation(Long reservationId){
         ReservationDomain reservationFounded = reservationRepositoryFindByIdGateway.findById(reservationId);
-        reservationService.reservationIsEnabled(reservationFounded);
-        reservationFounded.setEnabled(false);
+        reservationService.reservationStatusIsEnabled(reservationFounded);
+        reservationFounded.setStatus(ReservationStatus.CANCELLED);
         return reservationRepositoryUpdateGateway.update(reservationId, reservationFounded);
     }
 }

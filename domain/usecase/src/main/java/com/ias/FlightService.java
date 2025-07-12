@@ -1,6 +1,6 @@
 package com.ias;
 
-import com.ias.gateway.flight.FlightRepositoryFindAllByDateGateway;
+import com.ias.enums.FlightStatus;
 import com.ias.gateway.flight.FlightRepositoryFindByIdGateway;
 import com.ias.gateway.flight.FlightRepositorySaveGateway;
 
@@ -13,20 +13,18 @@ public class FlightService {
 
     private final FlightRepositoryFindByIdGateway flightRepositoryFindByIdGateway;
     private final FlightRepositorySaveGateway flightRepositorySaveGateway;
-    private final FlightRepositoryFindAllByDateGateway flightRepositoryFindAllByDateGateway;
 
-    public FlightService(FlightRepositoryFindByIdGateway flightRepositoryFindByIdGateway, FlightRepositorySaveGateway flightRepositorySaveGateway, FlightRepositoryFindAllByDateGateway flightRepositoryFindAllByDateGateway) {
+    public FlightService(FlightRepositoryFindByIdGateway flightRepositoryFindByIdGateway, FlightRepositorySaveGateway flightRepositorySaveGateway) {
         this.flightRepositoryFindByIdGateway = flightRepositoryFindByIdGateway;
         this.flightRepositorySaveGateway = flightRepositorySaveGateway;
-        this.flightRepositoryFindAllByDateGateway = flightRepositoryFindAllByDateGateway;
     }
 
     public FlightDomain getFlightById(Long flightId){
         return flightRepositoryFindByIdGateway.findById(flightId);
     }
 
-    public FlightDomain saveFlight(FlightDomain flightDomain){
-        return flightRepositorySaveGateway.save(flightDomain);
+    public void saveFlight(FlightDomain flightDomain){
+        flightRepositorySaveGateway.save(flightDomain);
     }
 
     public void validNameIsOnlyText(String name){
@@ -54,6 +52,16 @@ public class FlightService {
         if(originCity.equals(destinyCity)){
             LOGGER.severe("Flight OriginCity can't be equal to DestinationCity." + originCity + " " + destinyCity);
             throw new FlightIllegalArgumentException("OriginCity can't be equal to DestinationCity.");
+        }
+    }
+
+    public void setFlightToTicket(TicketDomain ticketDomain, FlightDomain flightDomain){
+        ticketDomain.setFlightDomain(flightDomain);
+    }
+
+    public void validateFlightIsFull(FlightDomain flightDomain){
+        if(flightDomain.getStatus() == FlightStatus.FULL){
+            throw new FlightFullException("The flight is full.");
         }
     }
 }

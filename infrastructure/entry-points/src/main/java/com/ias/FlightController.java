@@ -5,6 +5,7 @@ import com.ias.dto.request.FlightDTO;
 import com.ias.flight.FlightUseCaseFindAllImpl;
 import com.ias.flight.FlightUseCaseFindByIdImpl;
 import com.ias.flight.FlightUseCaseSaveImpl;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,7 @@ public class FlightController {
                 ));
     }
     @PostMapping
-    public ResponseEntity<ResponseDTO> createFlight(@RequestBody FlightDTO flightDomain){
+    public ResponseEntity<ResponseDTO> createFlight(@Valid @RequestBody FlightDTO flightDomain){
         FlightDomain domainResponse = flightUseCaseSave.createFlight(flightDomain.toDomain());
         return ResponseEntity
                 .status(HttpStatus.OK)
