@@ -2,6 +2,7 @@ package com.ias;
 
 import com.ias.dto.ResponseDTO;
 import com.ias.dto.request.FlightDTO;
+import com.ias.enums.HttpStatusCodeCustom;
 import com.ias.flight.FlightUseCaseFindAllImpl;
 import com.ias.flight.FlightUseCaseFindByIdImpl;
 import com.ias.flight.FlightUseCaseSaveImpl;
@@ -31,7 +32,7 @@ public class FlightController {
                 .body(new ResponseDTO(
                         domainResponse.stream()
                                 .map(FlightDTO::fromDomain).toList(),
-                        HttpStatus.OK,
+                        HttpStatusCodeCustom.OK_200,
                         "All Flights."
                 ));
     }
@@ -44,7 +45,7 @@ public class FlightController {
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
                         FlightDTO.fromDomain(flight),
-                        HttpStatus.OK,
+                        HttpStatusCodeCustom.OK_200,
                         "Get Flight by id."
                 ));
     }
@@ -55,7 +56,7 @@ public class FlightController {
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
                         FlightDTO.fromDomain(domainResponse),
-                        HttpStatus.CREATED,
+                        HttpStatusCodeCustom.CREATED_201,
                         "Flight created successfully."
                 ));
     }
