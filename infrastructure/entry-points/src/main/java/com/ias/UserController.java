@@ -3,6 +3,7 @@ package com.ias;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.ias.dto.ResponseDTO;
 import com.ias.dto.request.UserDTO;
+import com.ias.enums.HttpStatusCodeCustom;
 import com.ias.user.UserUseCaseLoginImpl;
 import com.ias.user.UserUseCaseSaveImpl;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,7 @@ public class UserController {
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDTO(
                         UserDTO.fromDomain(domainResponse),
-                        HttpStatus.CREATED,
+                        HttpStatusCodeCustom.CREATED_201,
                         "User registered successfully."
                 ));
     }
@@ -41,7 +42,7 @@ public class UserController {
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDTO(
                         userUseCaseLogin.loginUser(user.toDomain()),
-                        HttpStatus.OK,
+                        HttpStatusCodeCustom.OK_200,
                         "User logged successfully."
                 ));
     }

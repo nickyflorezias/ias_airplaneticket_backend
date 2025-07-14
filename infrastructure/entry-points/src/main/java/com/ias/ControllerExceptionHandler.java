@@ -1,10 +1,12 @@
 package com.ias;
 
 import com.ias.dto.ResponseDTO;
+import com.ias.enums.HttpStatusCodeCustom;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,7 +23,7 @@ public class ControllerExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(new ResponseDTO(
                         null,
-                        HttpStatus.CONFLICT,
+                        HttpStatusCodeCustom.CONFLICT_409,
                         flightFullException.getMessage()
                 ));
     }
@@ -32,7 +34,7 @@ public class ControllerExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ResponseDTO(
                         null,
-                        HttpStatus.BAD_REQUEST,
+                        HttpStatusCodeCustom.BAD_REQUEST_400,
                         flightIllegalArgumentException.getMessage()
                 ));
     }
@@ -43,7 +45,7 @@ public class ControllerExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(new ResponseDTO(
                         null,
-                        HttpStatus.CONFLICT,
+                        HttpStatusCodeCustom.CONFLICT_409,
                         nonFlightAvailableException.getMessage()
                 ));
     }
@@ -54,7 +56,7 @@ public class ControllerExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(new ResponseDTO(
                         null,
-                        HttpStatus.CONFLICT,
+                        HttpStatusCodeCustom.CONFLICT_409,
                         reservationAlreadyCanceledException.getMessage()
                 ));
     }
@@ -65,7 +67,7 @@ public class ControllerExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ResponseDTO(
                         null,
-                        HttpStatus.BAD_REQUEST,
+                        HttpStatusCodeCustom.BAD_REQUEST_400,
                         userIllegalArgumentException.getMessage()
                 ));
     }
@@ -76,7 +78,7 @@ public class ControllerExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ResponseDTO(
                         null,
-                        HttpStatus.BAD_REQUEST,
+                        HttpStatusCodeCustom.BAD_REQUEST_400,
                         illegalArgumentException.getMessage()
                 ));
     }
@@ -87,7 +89,7 @@ public class ControllerExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(new ResponseDTO(
                         null,
-                        HttpStatus.CONFLICT,
+                        HttpStatusCodeCustom.CONFLICT_409,
                         sqlIntegrityConstraintViolationException.getMessage().split("'")[0].trim()
                 ));
     }
@@ -99,7 +101,7 @@ public class ControllerExceptionHandler {
                 .body(
                         new ResponseDTO(
                                 null,
-                                HttpStatus.BAD_REQUEST,
+                                HttpStatusCodeCustom.BAD_REQUEST_400,
                                 methodArgumentNotValidException.getBindingResult()
                                         .getFieldErrors()
                                         .stream()
@@ -108,6 +110,17 @@ public class ControllerExceptionHandler {
                                         .orElse("Validation error")
                         )
                 );
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ResponseDTO> httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException httpRequestMethodNotSupportedException){
+        return ResponseEntity
+                .status(HttpStatus.METHOD_NOT_ALLOWED)
+                .body(new ResponseDTO(
+                        null,
+                        HttpStatusCodeCustom.METHOD_NOT_ALLOWED_405,
+                        "Method not allowed."
+                ));
     }
 
 }

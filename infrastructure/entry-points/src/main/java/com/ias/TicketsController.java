@@ -2,6 +2,7 @@ package com.ias;
 
 import com.ias.dto.ResponseDTO;
 import com.ias.dto.request.TicketDTO;
+import com.ias.enums.HttpStatusCodeCustom;
 import com.ias.ticket.TicketUseCaseFindAllTicketsByFlightIdImpl;
 import com.ias.ticket.TicketUseCaseSaveImpl;
 import jakarta.validation.Valid;
@@ -30,7 +31,7 @@ public class TicketsController {
                 .body(new ResponseDTO(
                         ticketResponse.stream()
                                 .map(TicketDTO::fromDomain).toList(),
-                        HttpStatus.OK,
+                        HttpStatusCodeCustom.OK_200,
                         "Get tickets with flight id " + flightId
                 ));
     }
@@ -42,7 +43,7 @@ public class TicketsController {
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDTO(
                         TicketDTO.fromDomain(ticketResponse),
-                        HttpStatus.CREATED,
+                        HttpStatusCodeCustom.CREATED_201,
                         "Created ticket successfully."
                 ));
     }
