@@ -2,6 +2,7 @@ package com.ias;
 
 import com.ias.dto.request.ReservationDTO;
 import com.ias.dto.ResponseDTO;
+import com.ias.enums.HttpStatusCodeCustom;
 import com.ias.reservation.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class ReservationController {
                 .body(new ResponseDTO(
                         reservationsResponse.stream()
                                 .map(ReservationDTO::fromDomain).toList(),
-                        HttpStatus.OK,
+                        HttpStatusCodeCustom.OK_200,
                         "Get all reservations with user id " + userId
                 ));
     }
@@ -43,7 +44,7 @@ public class ReservationController {
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
                         ReservationDTO.fromDomain(reservationResponse),
-                        HttpStatus.OK,
+                        HttpStatusCodeCustom.OK_200,
                         "Get all reservations with id " + reservationId
                 ));
     }
@@ -55,7 +56,7 @@ public class ReservationController {
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDTO(
                         ReservationDTO.fromDomain(reservationResponse),
-                        HttpStatus.CREATED,
+                        HttpStatusCodeCustom.CREATED_201,
                         "Reservation created to Date " + reservationResponse.getDate()
                 ));
     }
@@ -67,7 +68,7 @@ public class ReservationController {
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
                         ReservationDTO.fromDomain(reservationResponse),
-                        HttpStatus.OK,
+                        HttpStatusCodeCustom.OK_200,
                         "Reservation canceled successfully."
                 ));
     }
@@ -79,7 +80,7 @@ public class ReservationController {
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
                         ReservationDTO.fromDomain(reservationResponse),
-                        HttpStatus.OK,
+                        HttpStatusCodeCustom.OK_200,
                         "Reservation date updated successfully to " + reservation.getDate()
                 ));
     }
